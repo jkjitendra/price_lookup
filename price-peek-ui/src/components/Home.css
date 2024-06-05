@@ -1,0 +1,25 @@
+.home-container {
+    padding: 20px;
+  }
+  
+  .header {
+    margin-bottom: 20px;
+  }
+  
+  .content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .section-list, .section-details {
+    width: 45%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .section h2 {
+    margin-top: 0;
+  }
+  
