@@ -5,7 +5,7 @@ import axios from "../api/query";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const REGISTER_URL = "/price-peek/signup";
+const REGISTER_URL = "/signup";
 
 const Register = () => {
 

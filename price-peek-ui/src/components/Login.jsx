@@ -4,7 +4,7 @@ import {Link, useNavigate, useLocation} from "react-router-dom";
 import { getRolesFromToken } from "../utils/auth/auth.util";
 import axios from "../api/query";
 
-const LOGIN_URL = "/price-peek/login";
+const LOGIN_URL = "/login";
 
 const Login = () => {
 
