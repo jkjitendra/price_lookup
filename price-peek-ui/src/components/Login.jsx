@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import useAuth from "../hooks/useAuth";
 import {Link, useNavigate, useLocation} from "react-router-dom";
-import { getRolesFromToken } from "../utils/auth/auth.util";
+import { getEmailFromToken } from "../utils/auth/auth.util";
 import axios from "../api/query";
 
 const LOGIN_URL = "/login";
@@ -45,16 +45,21 @@ const Login = () => {
             if (response?.data) {
                 console.log('response', response.data.token);
                 const accessToken = response.data.token;
+                const refreshToken = response.data.refresh_token;
+                // Decode roles, email from token
+                // const roles = getRolesFromToken(accessToken);
+                const email = getEmailFromToken(accessToken);
+                console.log("email val : ", email);
+                setAuth({ email, accessToken, roles: ["USER"] });
+
                 // Store token in localStorage
                 localStorage.setItem('accessToken', accessToken);
-                // Decode roles from token
-                // const roles = getRolesFromToken(accessToken);
-                setAuth({ email, roles: ["USER"], accessToken });
+                localStorage.setItem('refreshToken', refreshToken);
 
                 setEmail('');
                 setPwd('');
-                navigate(from, { replace: true });
-                // navigate('/');
+                // navigate(from, { replace: true });
+                navigate('/home', { replace: true });
               } else {
                 throw new Error('No data in response');
               }
