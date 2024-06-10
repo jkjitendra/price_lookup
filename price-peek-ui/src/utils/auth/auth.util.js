@@ -10,3 +10,14 @@ export const getRolesFromToken = (token) => {
     return [];
   }
 };
+
+export const getEmailFromToken = (token) => {
+  try {
+    const decodedToken = jwtDecode(token);
+    console.log('decodedToken', decodedToken);
+    return decodedToken.email || '';
+  } catch (error) {
+    console.error('Invalid token', error);
+    return [];
+  }
+};
