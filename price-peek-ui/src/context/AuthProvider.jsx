@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from'react';
-import { getRolesFromToken } from '../utils/auth/auth.util';
+import { getRolesFromToken, getEmailFromToken } from '../utils/auth/auth.util';
 
 const AuthContext = createContext();
 
@@ -10,7 +10,8 @@ export const AuthProvider = ({ children }) => {
         if (token) {
             // const roles = getRolesFromToken(token);
             const roles = ['USER'];
-            return { token, roles };
+            const email = getEmailFromToken(token);
+            return { email, token, roles };
         }
         return {};
     });
@@ -21,13 +22,15 @@ export const AuthProvider = ({ children }) => {
         if (token) {
         //   const roles = getRolesFromToken(token);
             const roles = ['USER'];
-            setAuth({ token, roles });
+            const email = getEmailFromToken(token);
+            setAuth({ email, token, roles });
         }
       }, []);
 
     const logout = () => {
         setAuth({});
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         
         // Remove cookies or tokens here if necessary
     };
