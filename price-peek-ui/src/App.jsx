@@ -1,3 +1,5 @@
+import React, { useEffect } from'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Register from './components/Register';
 import Login from "./components/Login";
 import Logout from './components/Logout';
@@ -8,24 +10,35 @@ import Home from './components/Home';
 import Admin from './components/Admin';
 import Missing from './components/Missing';
 import { Routes, Route } from 'react-router-dom';
-import Dashboard from './components/Dashboard';
 import ProductLists from './components/ProductLists';
 import ProductDetails from './components/ProductDetails';
 
 function App() {
+
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Redirect from /index.html to /login if needed
+    if (location.pathname === '/index.html' || location.pathname === '/index.html/') {
+      navigate('/login', { replace: true });
+      }
+  }, [location, navigate]);
+
+  console.log("existing route",  location);
   return (
     <Routes>
       <Route path="/" element={<Layout />} >
         {/* public routes */}
+        <Route path="" element={<Login />} />
         <Route path="login" element={<Login />} />
         <Route path="logout" element={<Logout />} />
         <Route path="register" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
-        <Route path="dashboard" element={<Dashboard />} />
 
         {/* protected routes */}
         <Route element={<RequireAuth allowedRoles={['USER']} />}>
-          <Route path="/" element={<Home />} />
+          <Route path="home" element={<Home />} />
           <Route path="productlists" element={<ProductLists />} />
           <Route path="productdetails" element={<ProductDetails />} />
         </Route>
