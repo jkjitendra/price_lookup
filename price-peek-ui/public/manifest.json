@@ -1,6 +1,9 @@
 {
     "short_name": "Price Peek",
-    "name": "Extension for getting notified of price of a product",
+    "name": "Price Peek Extension",
+    "description": "Extension for getting notified of price of a product",
+    "version": "1.0.0",
+    "manifest_version": 3,
     "icons": [
       {
         "src": "favicon.ico",
