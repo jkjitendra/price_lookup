@@ -10,8 +10,7 @@ import Home from './components/Home';
 import Admin from './components/Admin';
 import Missing from './components/Missing';
 import { Routes, Route } from 'react-router-dom';
-import ProductLists from './components/ProductLists';
-import ProductDetails from './components/ProductDetails';
+import ForgotPassword from './components/ForgotPassword';
 
 function App() {
 
@@ -22,7 +21,7 @@ function App() {
     // Redirect from /index.html to /login if needed
     if (location.pathname === '/index.html' || location.pathname === '/index.html/') {
       navigate('/login', { replace: true });
-      }
+    }
   }, [location, navigate]);
 
   console.log("existing route",  location);
@@ -34,13 +33,15 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="logout" element={<Logout />} />
         <Route path="register" element={<Register />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* protected routes */}
         <Route element={<RequireAuth allowedRoles={['USER']} />}>
           <Route path="home" element={<Home />} />
-          <Route path="productlists" element={<ProductLists />} />
-          <Route path="productdetails" element={<ProductDetails />} />
+          {/* Commented out below as Home component is handling below routes */}
+          {/* <Route path="productslist" element={<ProductsList />} />
+          <Route path="addproduct" element={<AddProduct />} /> */}
         </Route>
         <Route  element={<RequireAuth allowedRoles={['ADMIN']} />}>
           <Route path="admin" element={<Admin />} />
