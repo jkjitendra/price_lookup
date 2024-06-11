@@ -1,0 +1,43 @@
+
+  * {
+    box-sizing: border-box;
+    scrollbar-width: none;
+  }
+  
+  body {
+    background: var(--color-primary);
+    color: var(--color-text);
+    direction: ltr;
+      font-family: Helvetica, Arial, sans-serif;
+    font-size: .9rem;
+    line-height: 1.5rem;
+      margin: 0;
+    overflow: hidden;
+  }
+  
+  .body__popup {
+    min-width: 24rem;
+    max-width: 31rem;
+    min-height: 38rem;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /*this */
+    padding: 10px;
+    background-color: #fff;
+  }
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .app-name {
+    /* margin-left: 10px; */
+    font-size: 24px;
+    font-weight: bold;
+    color: dodgerblue;
+  }
+  
