@@ -7,5 +7,10 @@
     "action": {
         "default_popup": "index.html",
         "default_title": "React Chrome Extension"
-    }
+    },
+    "permissions": [
+        "storage",
+        "tabs",
+        "activeTab"
+    ] 
 }
