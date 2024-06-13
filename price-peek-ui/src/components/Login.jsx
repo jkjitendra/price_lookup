@@ -8,7 +8,7 @@ import logo from '../assets/images/PricePeek.png';
 const LOGIN_URL = "/login";
 
 const Login = () => {
-  const { setAuth } = useAuth();
+  const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || "/";
@@ -27,6 +27,12 @@ const Login = () => {
   useEffect(() => {
     setErrMsg('');
   }, [email, pwd]);
+
+  useEffect(() => {
+    if (auth?.email) {
+      navigate('/home', { replace: true });
+    }
+  })
 
   const handleLogin = async (e) => {
     e.preventDefault();
