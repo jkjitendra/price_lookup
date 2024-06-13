@@ -1,25 +1,20 @@
-import React from 'react';
-import ProductDetails from "./ProductDetails";
-import ProductLists from "./ProductLists";
-import { Link } from "react-router-dom";
-import './Home.css';  // Import the CSS file
+import React, { useState } from 'react';
+import Header from './Header';
+import SectionList from './SectionList';
+import ProductsList from './ProductsList';
+import AddProduct from './AddProduct';
+import '../assets/styles/Home.css';
 
 const Home = () => {
+  const [activeSection, setActiveSection] = useState('productsList');
+
   return (
     <div className="home-container">
-      <div className="header">
-        <Link to="/logout" className="btn btn-primary">Logout</Link>
-        <p>You are inside Home Component.</p>
-      </div>
+      <Header />
+      <SectionList setActiveSection={setActiveSection} />
       <div className="content">
-        <div className="section-list">
-          <h2>Product Lists</h2>
-          <ProductLists />
-        </div>
-        <div className="section-details">
-          <h2>Product Details</h2>
-          <ProductDetails />
-        </div>
+        {activeSection === 'productsList' && <ProductsList />}
+        {activeSection === 'addproduct' && <AddProduct />}
       </div>
     </div>
   );
