@@ -24,7 +24,6 @@ function App() {
     }
   }, [location, navigate]);
 
-  console.log("existing route",  location);
   return (
     <Routes>
       <Route path="/" element={<Layout />} >
