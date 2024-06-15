@@ -25,6 +25,15 @@ const DataTable = ({ products }) => {
 
           </tr>
         </thead>
+        {products.length === 0 && (
+          <tbody>
+            <tr>
+              <td colSpan="7">
+                <h2>No Record Found</h2>
+              </td>
+            </tr>
+          </tbody>
+        )}
         <tbody>
           {products.map((product, index) => (
             <tr key={product.id}>
