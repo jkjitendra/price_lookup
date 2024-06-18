@@ -1,10 +1,14 @@
+/* Home.css */
+
 .home-container {
     display: flex;
     flex-direction: column;
-    height: 171%;
+    height: 100vh; /* else put 171% */
+    overflow: hidden; /* Prevent scrolling of the entire page */
 }
 
 .content {
     flex: 1; /* Allow the content to grow and take available space */
     overflow-y: auto; /* Enable scrolling if content overflows */
+    padding-top: 10px;
 }
