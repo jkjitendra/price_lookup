@@ -93,8 +93,8 @@ const Register = () => {
         </section>
       ) : (
         <section className="flex items-center justify-center min-h-screen bg-blue-600">
-          <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-md shadow-md">
-            <img src={logo} alt="Logo" className="mx-auto w-24 h-24" />
+          <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-[50px] shadow-[10px_10px_35px_#FEC924]">
+            <img src={logo} alt="Logo" className="mx-auto w-16" />
             <form className="space-y-4" onSubmit={handleRegister}>
               <p ref={errRef} className={errMsg ? 'text-red-500' : 'hidden'} aria-live="assertive">
                 {errMsg}
