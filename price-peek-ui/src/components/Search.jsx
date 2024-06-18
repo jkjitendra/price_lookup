@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import DataTable from './DataTable'; 
 import '../assets/styles/Search.css';
 
-const Search = ({products}) => {
+const Search = ({products, setProducts }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(products);
   // const products = useSelector(state => state.products.products);
@@ -30,7 +30,10 @@ const Search = ({products}) => {
           className="search-input"
         />
       </div>
-      <DataTable products={filteredProducts} />
+      <DataTable
+        products={filteredProducts}
+        setProducts={setProducts}
+      />
     </div>
   );
 };
