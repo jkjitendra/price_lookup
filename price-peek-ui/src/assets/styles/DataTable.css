@@ -1,3 +1,5 @@
+/* DataTable.css */
+
 .table-container {
   width: 100%;
   overflow-x: auto;
@@ -11,7 +13,7 @@
 }
 
 .data-table th, .data-table td {
-  padding: 10px;
+  padding: 8px;
   text-align: center;
 }
 
@@ -50,4 +52,33 @@
   border: none;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.edit-btn svg path,
+.delete-btn svg path {
+  transition: fill 0.3s ease;
+}
+
+.edit-btn:hover svg path {
+  fill: rgb(154, 95, 23);
+}
+
+.delete-btn:hover svg path {
+  fill: rgb(142, 4, 4); /* Darker shade of red */
+}
+
+.editable-input {
+  border: 2px solid #4CAF50;
+  border-radius: 4px;
+  padding: 5px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.save-btn svg path {
+  fill: #4CAF50;
+}
+
+.save-btn:hover svg path {
+  fill: #388E3C;
 }
