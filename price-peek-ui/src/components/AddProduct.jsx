@@ -6,6 +6,7 @@ const CREATE_PRODUCT = '/store-product';
 
 const AddProduct = () => {
   const accessToken = localStorage.getItem('accessToken');
+  const [favName, setFavName] = useState('');
   const [productLink, setProductLink] = useState('');
   const [targetPrice, setTargetPrice] = useState('');
   const [error, setError] = useState('');
@@ -15,6 +16,7 @@ const AddProduct = () => {
     if (url.includes('amazon')) return 'amazon';
     if (url.includes('flipkart')) return 'flipkart';
     if (url.includes('meesho')) return 'meesho';
+    if (url.includes('snapdeal')) return'snapdeal';
     return 'unknown';
   };
 
@@ -28,6 +30,7 @@ const AddProduct = () => {
     }
 
     const data = {
+      name: favName,
       product_link: productLink,
       target_price: targetPrice,
       product_platform: platform
@@ -39,7 +42,6 @@ const AddProduct = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`
         },
-        // withCredentials: true
       });
 
       if (response.data.success) {
@@ -59,6 +61,16 @@ const AddProduct = () => {
       {error && <p className="error">{error}</p>}
       {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="favName">Add Name to your Product</label>
+          <input
+            type="text"
+            id="favName"
+            value={favName}
+            onChange={(e) => setFavName(e.target.value)}
+            required
+          />
+        </div>
         <div className="form-group">
           <label htmlFor="productLink">Product Link</label>
           <input
