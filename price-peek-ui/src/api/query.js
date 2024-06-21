@@ -1,20 +1,45 @@
 import axios from "axios";
+import refreshToken from './refreshToken';
 
-const instance = axios.create({
+const api = axios.create({
     baseURL: "https://pricepeek.ashutoshviramgama.com/",
     // withCredentials: true
 });
 
-instance.interceptors.request.use(function (config) {
-    // Add CORS headers
-    config.headers['Content-Type'] = 'application/json';
-    config.headers['Accept'] = 'application/json';
-    
+api.interceptors.request.use(
+  async (config) => {
+    const accessToken = localStorage.getItem('accessToken');
+    if (accessToken) {
+      config.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
     return config;
-}, function (error) {
-    // Do something with request error
-    console.log('error in query file', error);
+  },
+  (error) => {
     return Promise.reject(error);
-});
+  }
+);
 
-export default instance;
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const newAccessToken = await refreshToken();
+        axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+        return api(originalRequest);
+      } catch (err) {
+        console.error('Refresh token expired', err);
+        // Handle token expiration (e.g., redirect to login)
+        // localStorage.removeItem('accessToken');
+        // localStorage.removeItem('refreshToken');
+        window.location.href = '/login'; // Redirect to login page
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;
