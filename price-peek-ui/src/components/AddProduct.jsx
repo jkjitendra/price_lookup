@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from '../api/query';
 import '../assets/styles/AddProduct.css';
+import api from '../api/query';
 
 const CREATE_PRODUCT = '/store-product';
 
@@ -37,7 +37,7 @@ const AddProduct = () => {
     };
 
     try {
-      const response = await axios.post(CREATE_PRODUCT, data, {
+      const response = await api.post(CREATE_PRODUCT, data, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${accessToken}`

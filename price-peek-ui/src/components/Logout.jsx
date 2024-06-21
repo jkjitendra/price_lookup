@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import axios from "../api/query";
+import api from '../api/query';
 
-const LOGOUT_URL = "/api/v1/auth/logout";
+const LOGOUT_URL = "/logout";
 
 const Logout = () => {
     const { logout } = useAuth();
@@ -14,7 +14,7 @@ const Logout = () => {
         if (userConfirmed) {
             try {
                 // Call the backend to clear the HttpOnly cookie
-                // await axios.post(LOGOUT_URL);
+                await api.post(LOGOUT_URL);
 
                 // Clear any client-side authentication state
                 logout();

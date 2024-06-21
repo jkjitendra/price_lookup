@@ -3,9 +3,9 @@ import '../assets/styles/DataTable.css';
 import EditIcon from '../assets/svgs/EditIcon';
 import DeleteIcon from '../assets/svgs/DeleteIcon';
 import SaveIcon from '../assets/svgs/SaveIcon';
-import axios from '../api/query';
-import extractProductId from '../utils/extractFromURL';
+// import extractProductId from '../utils/extractFromURL';
 import DashIcon from '../assets/svgs/DashIcon';
+import api from '../api/query';
 
 const DELETE_URL = '/product';
 const UPDATE_URL = '/update-product';
@@ -28,7 +28,7 @@ const DataTable = ({ products, setProducts }) => {
   const handleSave = async (product) => {
     const accessToken = localStorage.getItem('accessToken');
     try {
-      const response = await axios.put(`${UPDATE_URL}/${product.id}`, {
+      const response = await api.put(`${UPDATE_URL}/${product.id}`, {
         product_link: product.url,
         target_price: newTargetPrice,
         product_platform: product.platform
@@ -61,7 +61,7 @@ const DataTable = ({ products, setProducts }) => {
     if (userConfirmed) {
         const accessToken = localStorage.getItem('accessToken');
         try {
-          const response = await axios.delete(`${DELETE_URL}/${productId}`, {
+          const response = await api.delete(`${DELETE_URL}/${productId}`, {
             headers: {
               'Authorization': `Bearer ${accessToken}`,
             },
