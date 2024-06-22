@@ -25,14 +25,13 @@ export const AuthProvider = ({ children }) => {
             const email = getEmailFromToken(token);
             setAuth({ email, token, roles });
         }
-      }, []);
+      }, [setAuth]);
 
     const logout = () => {
         setAuth({});
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        
-        // Remove cookies or tokens here if necessary
+    
     };
 
     return (
