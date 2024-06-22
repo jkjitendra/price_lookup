@@ -14,7 +14,7 @@ const Logout = () => {
         if (userConfirmed) {
             try {
                 // Call the backend to clear the HttpOnly cookie
-                await api.post(LOGOUT_URL);
+                // await api.post(LOGOUT_URL);
 
                 // Clear any client-side authentication state
                 logout();
