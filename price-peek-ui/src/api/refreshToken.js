@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const REFRESH_URL = '/generate-token-from-refresh';
+const BASEURL = "https://pricepeek.ashutoshviramgama.com/";
+const REFRESH_URL = `${BASEURL}/generate-token-from-refresh`;
 
 const refreshToken = async () => {
   const refreshToken = localStorage.getItem('refreshToken');
@@ -9,12 +10,10 @@ const refreshToken = async () => {
   }
   
   try {
-    const response = await axios.post(REFRESH_URL, {}, {
+    const response = await axios.post(REFRESH_URL, { 'refresh-token': refreshToken }, {
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${refreshToken}`
       },
-      withCredentials: true,
     });
 
     const { token } = response.data;

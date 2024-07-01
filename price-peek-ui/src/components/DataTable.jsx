@@ -29,6 +29,7 @@ const DataTable = ({ products, setProducts }) => {
     const accessToken = localStorage.getItem('accessToken');
     try {
       const response = await api.put(`${UPDATE_URL}/${product.id}`, {
+        name: product.name,
         product_link: product.url,
         target_price: newTargetPrice,
         product_platform: product.platform
