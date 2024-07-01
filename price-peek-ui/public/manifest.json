@@ -1,6 +1,6 @@
 {
     "short_name": "Price Peek",
-    "name": "Price Peek Extension",
+    "name": "Price Peek",
     "description": "Extension for getting notified of price of a product",
     "version": "1.0.0",
     "manifest_version": 3,
