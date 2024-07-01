@@ -10,12 +10,12 @@ const Search = ({products, setProducts }) => {
   useEffect(() => {
     setFilteredProducts(
       products.filter(product =>
-        product.url?.toLowerCase().includes(searchTerm.toLowerCase())
+        product.name?.toLowerCase().includes(searchTerm.toLowerCase())
       )
     );
   }, [searchTerm, products]);
 
-  console.log('products in search', products);
+  // console.log('products in search', products);
   console.log('filteredProducts in search', filteredProducts);
   
   return (
