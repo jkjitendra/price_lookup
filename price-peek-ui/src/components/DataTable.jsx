@@ -95,11 +95,11 @@ const DataTable = ({ products, setProducts }) => {
     };
   }, []);
 
-  useEffect(() => {
-    console.log('products recieved ', products);
-  }, [products]);
+  // useEffect(() => {
+  //   console.log('products recieved ', products);
+  // }, [products]);
 
-  console.log('products recieved ', products);
+  // console.log('products recieved ', products);
   return (
     <div className="table-container">
       <table className="data-table">
@@ -109,7 +109,7 @@ const DataTable = ({ products, setProducts }) => {
             {/* <th>Image</th> */}
             <th>Name</th>
             {/* <th>Current Price</th> */}
-            <th>Lowest Price</th>
+            {/* <th>Lowest Price</th> */}
             <th>Target Price</th>
             <th>Action</th>
 
@@ -134,7 +134,7 @@ const DataTable = ({ products, setProducts }) => {
                 {extractProductId(product.url)}
               </td> */}
               {/* <td>₹{product?.price}</td> */}
-              <td>{calculateLowestPrice(product?.price_list)}</td>
+              {/* <td>{calculateLowestPrice(product?.price_list)}</td> */}
               <td>
                 {editingProductId === product.id ? (
                   <input

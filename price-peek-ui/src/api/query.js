@@ -3,7 +3,6 @@ import refreshToken from './refreshToken';
 
 const api = axios.create({
     baseURL: "https://pricepeek.ashutoshviramgama.com/",
-    // withCredentials: true
 });
 
 api.interceptors.request.use(
@@ -23,7 +22,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response.status === 401 && error.response.data.message === 'Token has expired' && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const newAccessToken = await refreshToken();
@@ -33,8 +32,8 @@ api.interceptors.response.use(
       } catch (err) {
         console.error('Refresh token expired', err);
         // Handle token expiration (e.g., redirect to login)
-        // localStorage.removeItem('accessToken');
-        // localStorage.removeItem('refreshToken');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         window.location.href = '/login'; // Redirect to login page
       }
     }

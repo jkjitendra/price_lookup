@@ -16,7 +16,7 @@ const ProductsList = () => {
       },
     })
       .then(response => {
-        console.log(response.data.products.data);
+        // console.log(response.data.products.data);
         setProducts(response.data.products.data || []); // Fallback to empty array if undefined
       })
       .catch(error => {
