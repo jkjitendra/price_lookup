@@ -40,7 +40,7 @@ const AddProduct = () => {
       const response = await api.post(CREATE_PRODUCT, data, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
