@@ -71,8 +71,16 @@ const Register = () => {
       } else if (error.response?.status === 404) {
         const specificMsg = error.response?.data?.message?.split(':')[0];
         setErrMsg(specificMsg);
+      } else if (error.response?.status === 422) {
+        const emailErrors = error.response?.data?.errors?.email || [];
+        console.log(emailErrors);
+        if (emailErrors[0] === 'The email has already been taken.') {
+          setErrMsg("Email already in use!");
+        } else {
+          setErrMsg("Registration Failed!");
+        }
       } else {
-        setErrMsg("Registration Failed");
+        setErrMsg("Registration Failed!");
       }
       errRef.current.focus();
     }
