@@ -6,11 +6,9 @@
     "manifest_version": 3,
     "action": {
         "default_popup": "index.html",
-        "default_title": "React Chrome Extension"
+        "default_title": "Price Peek Chrome Extension"
     },
-    "permissions": [
-        "storage",
-        "tabs",
-        "activeTab"
-    ] 
+    "icons": {
+        "128": "icons/PricePeek-128.png"
+    }
 }
