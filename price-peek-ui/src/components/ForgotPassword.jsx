@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 
 const FORGOT_PASSWORD_URL = '/forgot-password';
 const CHANGE_PASSWORD_URL = '/change-password';
+const purpose = "forgot_password";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(FORGOT_PASSWORD_URL, JSON.stringify({ email }), {
+      const response = await axios.post(FORGOT_PASSWORD_URL, JSON.stringify({ email, purpose }), {
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -34,7 +35,7 @@ const ForgotPassword = () => {
 
   const handleResendOTP = async () => {
     try {
-      const response = await axios.post(FORGOT_PASSWORD_URL, JSON.stringify({ email }), {
+      const response = await axios.post(FORGOT_PASSWORD_URL, JSON.stringify({ email, purpose }), {
         headers: { 'Content-Type': 'application/json' },
       });
 
