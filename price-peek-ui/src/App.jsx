@@ -11,6 +11,7 @@ import Admin from './components/Admin';
 import Missing from './components/Missing';
 import { Routes, Route } from 'react-router-dom';
 import ForgotPassword from './components/ForgotPassword';
+import VerifyOTP from './components/VerifyOTP';
 
 function App() {
 
@@ -33,6 +34,7 @@ function App() {
         <Route path="logout" element={<Logout />} />
         <Route path="register" element={<Register />} />
         <Route path="forgot-password" element={<ForgotPassword />} />
+        <Route path="verify-otp" element={<VerifyOTP />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* protected routes */}
