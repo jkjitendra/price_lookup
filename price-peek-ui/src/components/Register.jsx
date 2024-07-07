@@ -28,7 +28,6 @@ const Register = () => {
   const [confirmPwdFocus, setConfirmPwdFocus] = useState(false);
   
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
