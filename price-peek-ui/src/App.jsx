@@ -40,9 +40,6 @@ function App() {
         {/* protected routes */}
         <Route element={<RequireAuth allowedRoles={['USER']} />}>
           <Route path="home" element={<Home />} />
-          {/* Commented out below as Home component is handling below routes */}
-          {/* <Route path="productslist" element={<ProductsList />} />
-          <Route path="addproduct" element={<AddProduct />} /> */}
         </Route>
         <Route  element={<RequireAuth allowedRoles={['ADMIN']} />}>
           <Route path="admin" element={<Admin />} />
