@@ -70,6 +70,8 @@ const Login = () => {
         const passwordErrors = err.response?.data?.errors?.password || [];
         const emailErrors = err.response?.data?.errors?.email || [];
         setErrMsg(passwordErrors.includes('The password must be at least 6 characters.') ? passwordErrors.join(' ') : emailErrors.join(' '));
+      } else if (err.response?.status === 403 && err.response?.data?.message === 'Email is not verified') {
+        navigate('/verify-otp', { state: { email } }); // Redirect to OTP verification page if email is not verified
       } else {
         setErrMsg('Login Failed');
       }
