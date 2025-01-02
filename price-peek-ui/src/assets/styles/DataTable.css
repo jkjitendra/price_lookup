@@ -1,10 +1,10 @@
-/* DataTable.css */
-
 .table-container {
   width: 100%;
-  overflow-x: auto;
+  max-height: 380px; /* Set the height for the scrollable table */
+  overflow-y: auto; /* Enable vertical scrolling */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
 }
 
 .data-table {
@@ -20,6 +20,9 @@
 .data-table thead {
   background-color: #3983FD;
   color: white;
+  position: sticky; /* Makes the header sticky */
+  top: 0; /* Sticks it to the top of the scrollable container */
+  z-index: 1; /* Ensures it stays above other elements */
 }
 
 .data-table th {

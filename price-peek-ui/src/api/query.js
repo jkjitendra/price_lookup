@@ -1,5 +1,7 @@
 import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import refreshToken from './refreshToken';
+import useAuth from '../hooks/useAuth';
 
 const api = axios.create({
     baseURL: "https://pricepeek.ashutoshviramgama.com/",
@@ -21,8 +23,17 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
+    const {logout} = useAuth();
+    const navigate = useNavigate();
     const originalRequest = error.config;
-    if (error.response.status === 401 && error.response.data.message === 'Token has expired' && !originalRequest._retry) {
+    console.log('Error status:', error);
+
+    // If token expired and the request is not retried
+    if (error.response?.status === 401
+        && error.response?.data?.message === 'Token has expired' 
+        && !originalRequest._retry
+    ) {
+      console.log('Token expired, attempting to refresh...');
       originalRequest._retry = true;
       try {
         const newAccessToken = await refreshToken();
@@ -30,13 +41,15 @@ api.interceptors.response.use(
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
         return api(originalRequest);
       } catch (err) {
-        console.error('Refresh token expired', err);
-        // Handle token expiration (e.g., redirect to login)
+        console.error('Refresh token expired', err.response?.data || err.messagerr);
+        // Clear tokens and redirect to login
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        window.location.href = '/login'; // Redirect to login page
+        logout();
+        navigate("/login") // Redirect to login page
       }
     }
+    console.error('API Error:', error.response?.data || error.message);
     return Promise.reject(error);
   }
 );

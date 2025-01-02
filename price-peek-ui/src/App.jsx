@@ -1,6 +1,7 @@
-import React, { useEffect } from'react';
+import { useEffect, useContext } from'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Register from './components/Register';
+import Loading from './components/Loading';
 import Login from "./components/Login";
 import Logout from './components/Logout';
 import Layout from './components/Layout';
@@ -8,6 +9,7 @@ import Unauthorized from './components/Unauthorized';
 import RequireAuth from './components/RequireAuth';
 import Home from './components/Home';
 import Admin from './components/Admin';
+import AuthContext from './context/AuthProvider';
 import Missing from './components/Missing';
 import { Routes, Route } from 'react-router-dom';
 import ForgotPassword from './components/ForgotPassword';
@@ -17,6 +19,7 @@ function App() {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const { loading } = useContext(AuthContext);
   
   useEffect(() => {
     // Redirect from /index.html to /login if needed
@@ -24,6 +27,10 @@ function App() {
       navigate('/login', { replace: true });
     }
   }, [location, navigate]);
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <Routes>
