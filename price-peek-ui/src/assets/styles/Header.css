@@ -1,44 +1,49 @@
 /* Header.css */
 
-  * {
-    box-sizing: border-box;
-    scrollbar-width: none;
-  }
-  
-  body {
-    background: var(--color-primary);
-    color: var(--color-text);
-    direction: ltr;
-    font-family: Helvetica, Arial, sans-serif;
-    font-size: .9rem;
-    line-height: 1.5rem;
-    margin: 0;
-    overflow: hidden;
-  }
-  
-  .body__popup {
-    min-width: 24rem;
-    max-width: 31rem;
-    min-height: 38rem;
-  }
+* {
+  box-sizing: border-box;
+  scrollbar-width: none;
+}
 
-  .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #fff;
-  }
-  
-  .logo {
-    width: 55px;
-    margin-left: 22px;
-  }
-  
-  .app-name {
-    /* margin-left: 10px; */
-    font-size: 24px;
-    font-weight: bold;
-    color: dodgerblue;
-  }
-  
+body {
+  background: var(--color-primary);
+  color: var(--color-text);
+  direction: ltr;
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: .9rem;
+  line-height: 1.5rem;
+  margin: 0;
+  overflow: hidden;
+}
+
+.body__popup {
+  min-width: 24rem;
+  max-width: 31rem;
+  min-height: 38rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #fff;
+  /* position: sticky; */
+}
+
+.logo {
+  width: 55px;
+  margin-left: 22px;
+}
+
+.app-name {
+  /* margin-left: 10px; */
+  font-size: 24px;
+  font-weight: bold;
+  color: dodgerblue;
+}
+
+.content.no-scroll {
+  overflow: hidden; 
+  height: 100%;
+}
