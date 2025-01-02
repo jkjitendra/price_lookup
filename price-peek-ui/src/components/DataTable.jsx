@@ -4,6 +4,7 @@ import EditIcon from '../assets/svgs/EditIcon';
 import DeleteIcon from '../assets/svgs/DeleteIcon';
 import SaveIcon from '../assets/svgs/SaveIcon';
 // import extractProductId from '../utils/extractFromURL';
+import Modal from './Modal';
 import DashIcon from '../assets/svgs/DashIcon';
 import api from '../api/query';
 
@@ -14,7 +15,10 @@ const DataTable = ({ products, setProducts }) => {
 
   const [editingProductId, setEditingProductId] = useState(null);
   const [newTargetPrice, setNewTargetPrice] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
   const editFieldRef = useRef(null);
+  const saveIconRef = useRef(null);
 
   const calculateLowestPrice = (priceList) => {
     return priceList && priceList.length ? `₹${Math.min(...priceList)}` : <DashIcon />;
@@ -23,11 +27,26 @@ const DataTable = ({ products, setProducts }) => {
   const handleEdit = (product) => {
     setEditingProductId(product.id);
     setNewTargetPrice(product.target_price);
+
+    // Focus the input field after setting editingProductId
+    setTimeout(() => {
+      if (editFieldRef.current) {
+        editFieldRef.current.focus();
+      }
+    }, 0);
   };
 
   const handleSave = async (product) => {
+    if (product?.target_price === newTargetPrice) {
+      setEditingProductId(null);
+      setNewTargetPrice('');
+      return;
+    }
+
     const accessToken = localStorage.getItem('accessToken');
+
     try {
+
       const response = await api.put(`${UPDATE_URL}/${product.id}`, {
         name: product.name,
         product_link: product.url,
@@ -45,37 +64,42 @@ const DataTable = ({ products, setProducts }) => {
             p.id === product.id ? { ...p, target_price: response.data.changes.target_price } : p
           )
         );
-        setEditingProductId(null);
       } else {
         console.error('Failed to update the product');
-        setEditingProductId(null);
       }
     } catch (error) {
       console.error('There was an error updating the product!', error);
-      setEditingProductId(null);
+    } finally {
+      setEditingProductId(null); // Clear the editing ID after the API call
     }
   };
 
-  const handleDelete = async (product) => {
+  const handleDelete = (product) => {
+    setProductToDelete(product);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async (product) => {
     const productId = product.id;
-    const userConfirmed = window.confirm(`Delete product: ${product.name}?`);
-    if (userConfirmed) {
-        const accessToken = localStorage.getItem('accessToken');
-        try {
-          const response = await api.delete(`${DELETE_URL}/${productId}`, {
-            headers: {
-              'Authorization': `Bearer ${accessToken}`,
-            },
-          });
     
-          if (response.data.status === 'Product deleted successfully') {
-            setProducts((prevProducts) => prevProducts.filter(product => product.id !== productId));
-          } else {
-            console.error('Failed to delete the product');
-          }
-        } catch (error) {
-          console.error('There was an error deleting the product!', error);
-        }
+    const accessToken = localStorage.getItem('accessToken');
+    try {
+      const response = await api.delete(`${DELETE_URL}/${productId}`, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (response.data.status === 'Product deleted successfully') {
+        setProducts((prevProducts) => prevProducts.filter(product => product.id !== productId));
+      } else {
+        console.error('Failed to delete the product');
+      }
+    } catch (error) {
+      console.error('There was an error deleting the product!', error);
+    } finally {
+      setShowDeleteModal(false);
+      setProductToDelete(null);
     }
   };
 
@@ -83,8 +107,19 @@ const DataTable = ({ products, setProducts }) => {
     window.open(url, '_blank');
   };
 
+  // const handleClickOutside = (event) => {
+  //   if (editFieldRef.current && !editFieldRef.current.contains(event.target)) {
+  //     setEditingProductId(null);
+  //   }
+  // };
   const handleClickOutside = (event) => {
-    if (editFieldRef.current && !editFieldRef.current.contains(event.target)) {
+    // Check if the click is outside the editable input or SaveIcon
+    if (
+      editFieldRef.current &&
+      !editFieldRef.current.contains(event.target) &&
+      saveIconRef.current &&
+      !saveIconRef.current.contains(event.target)
+    ) {
       setEditingProductId(null);
     }
   };
@@ -96,11 +131,6 @@ const DataTable = ({ products, setProducts }) => {
     };
   }, []);
 
-  // useEffect(() => {
-  //   console.log('products recieved ', products);
-  // }, [products]);
-
-  // console.log('products recieved ', products);
   return (
     <div className="table-container">
       <table className="data-table">
@@ -140,9 +170,19 @@ const DataTable = ({ products, setProducts }) => {
                 {editingProductId === product.id ? (
                   <input
                     type="number"
+                    ref={editFieldRef}
                     value={newTargetPrice}
-                    onChange={(e) => setNewTargetPrice(e.target.value)}
+                    // onChange={(e) => setNewTargetPrice(e.target.value)}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (/^\d*$/.test(value) || value === '') { // Regex to allow only digits
+                        setNewTargetPrice(value);
+                      }
+                    }}
                     className="editable-input"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSave(product);
+                    }}
                   />
                 ) : (
                   `₹${product?.target_price}`
@@ -151,9 +191,14 @@ const DataTable = ({ products, setProducts }) => {
               <td>
                 <div className='svg-container'>
                   {editingProductId === product.id ? (
-                    <SaveIcon onClick={() => handleSave(product)} />
+                    <div ref={saveIconRef} >
+                      <SaveIcon onClick={() => handleSave(product)} />
+                    </div>
                   ) : (
-                    <EditIcon onClick={() => handleEdit(product)} />
+                    <>
+                      {/* {console.log("EditIcon rendered for product:", product.id)} */}
+                      <EditIcon onClick={() => handleEdit(product)} />
+                    </>
                   )}
                   <DeleteIcon onClick={() => handleDelete(product)} />
                 </div>
@@ -162,6 +207,16 @@ const DataTable = ({ products, setProducts }) => {
           ))}
         </tbody>
       </table>
+
+      {showDeleteModal && (
+        <Modal
+          title="Delete Confirmation"
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={confirmDelete}
+        >
+          Are you sure you want to delete the product: {productToDelete?.name}?
+        </Modal>
+      )}
     </div>
   );
 };

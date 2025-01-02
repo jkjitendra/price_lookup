@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import axios from '../api/query';
 import { Link, useNavigate } from 'react-router-dom';
 
-const FORGOT_PASSWORD_URL = '/forgot-password';
+const GENERATE_OTP_URL = '/generate-otp';
 const CHANGE_PASSWORD_URL = '/change-password';
 const purpose = "forgot_password";
 
@@ -18,12 +18,13 @@ const ForgotPassword = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(FORGOT_PASSWORD_URL, JSON.stringify({ email, purpose }), {
+      const response = await axios.post(GENERATE_OTP_URL, JSON.stringify({ email, purpose }), {
         headers: { 'Content-Type': 'application/json' },
       });
 
       if (response.data.success) {
         setStep(2);
+        // navigate('/verify-otp', { state: { email, purpose } });
         setErrMsg('');
       } else {
         setErrMsg(response.data.message);
@@ -35,7 +36,8 @@ const ForgotPassword = () => {
 
   const handleResendOTP = async () => {
     try {
-      const response = await axios.post(FORGOT_PASSWORD_URL, JSON.stringify({ email, purpose }), {
+      
+      const response = await axios.post(GENERATE_OTP_URL, JSON.stringify({ email, purpose }), {
         headers: { 'Content-Type': 'application/json' },
       });
 
@@ -122,7 +124,7 @@ const ForgotPassword = () => {
                   className="w-full px-3 py-2 mt-1 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
-              <button type="submit" className="w-full px-4 py-2 text-white bg-yellow-500 rounded-md">Change Password</button>
+              <button type="submit" className="w-full px-4 py-2 text-white bg-yellow-500 rounded-md">Update Password</button>
             </form>
             <div className="text-center mt-4">
               <button onClick={handleResendOTP} className="text-sm text-blue-500">Didn't receive the OTP? Resend</button>
