@@ -1,6 +1,7 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
 import useAuth from "../hooks/useAuth";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import LoadingContext from "../context/LoadingContext";
 import { getEmailFromToken } from "../utils/auth/auth.util";
 import axios from "../api/query";
 import logo from '../assets/images/PricePeek.png';
@@ -10,14 +11,13 @@ const LOGIN_URL = "/login";
 const Login = () => {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const { setLoading } = useContext(LoadingContext);
 
   const userRef = useRef();
   const errRef = useRef();
 
-  const [email, setEmail] = useState('');
-  const [pwd, setPwd] = useState('');
+  const [email, setEmail] = useState('jatwat123@gmail.com');
+  const [pwd, setPwd] = useState('Levelup123@');
   const [errMsg, setErrMsg] = useState('');
 
   useEffect(() => {
@@ -36,6 +36,7 @@ const Login = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await axios.post(LOGIN_URL, JSON.stringify({ email, password: pwd }), {
@@ -59,7 +60,7 @@ const Login = () => {
         throw new Error('No data in response');
       }
     } catch (err) {
-      console.log('ye rha error', err);
+      console.error('ye rha error', err);
       if (!err.response) {
         setErrMsg('No Server Response');
       } else if (err.response?.status === 400) {
@@ -69,13 +70,19 @@ const Login = () => {
       } else if (err.response?.status === 422) {
         const passwordErrors = err.response?.data?.errors?.password || [];
         const emailErrors = err.response?.data?.errors?.email || [];
-        setErrMsg(passwordErrors.includes('The password must be at least 6 characters.') ? passwordErrors.join(' ') : emailErrors.join(' '));
+        setErrMsg(
+          passwordErrors.includes('The password must be at least 6 characters.')
+            ? passwordErrors.join(' ')
+            : emailErrors.join(' ')
+        );
       } else if (err.response?.status === 403 && err.response?.data?.message === 'Email is not verified') {
         navigate('/verify-otp', { state: { email } }); // Redirect to OTP verification page if email is not verified
       } else {
         setErrMsg('Login Failed');
       }
       errRef.current.focus();
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -83,7 +90,7 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-blue-600">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-[50px] shadow-[10px_10px_35px_#FEC924]">
         <img src={logo} alt="Logo" className="mx-auto w-24" />
-        <form className="mt-8 space-y-6" >
+        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div>
             <label htmlFor="login-email" className="block text-sm font-medium text-gray-700">Email</label>
             <input
@@ -109,7 +116,7 @@ const Login = () => {
             />
           </div>
           <div className="flex items-center justify-between">
-            <button type="submit" className="px-4 py-2 text-white bg-yellow-500 rounded-md" onClick={handleLogin}>Sign In</button>
+            <button type="submit" className="px-4 py-2 text-white bg-yellow-500 rounded-md" >Sign In</button>
             <Link to="/register" className="text-sm text-blue-500">Create Account</Link>
           </div>
           <div className="text-center">
