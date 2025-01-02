@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState, useContext } from 'react';
+import LoadingContext from '../context/LoadingContext';
 import '../assets/styles/AddProduct.css';
 import api from '../api/query';
 
@@ -11,6 +12,8 @@ const AddProduct = () => {
   const [targetPrice, setTargetPrice] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const { setLoading } = useContext(LoadingContext);
+
 
   const determinePlatform = (url) => {
     if (url.includes('amazon')) return 'amazon';
@@ -22,10 +25,13 @@ const AddProduct = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const platform = determinePlatform(productLink);
 
     if (platform === 'unknown') {
       setError('Unsupported platform');
+      setLoading(false);
       return;
     }
 
@@ -46,6 +52,7 @@ const AddProduct = () => {
 
       if (response.data.success) {
         setSuccess('Product added successfully');
+        setFavName('');
         setProductLink('');
         setTargetPrice('');
       } else {
@@ -53,13 +60,13 @@ const AddProduct = () => {
       }
     } catch (err) {
       setError('An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="add-product-container">
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="favName">Add Name to your Product</label>
@@ -93,6 +100,9 @@ const AddProduct = () => {
         </div>
         <button type="submit" className="submit-btn">Submit</button>
       </form>
+
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
     </div>
   );
 };
