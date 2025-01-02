@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Header from './Header';
 import SectionList from './SectionList';
 import ProductsList from './ProductsList';
@@ -12,7 +12,7 @@ const Home = () => {
     <div className="home-container">
       <Header />
       <SectionList setActiveSection={setActiveSection} />
-      <div className="content">
+      <div className="content no-scroll">
         {activeSection === 'productsList' && <ProductsList />}
         {activeSection === 'addproduct' && <AddProduct />}
       </div>

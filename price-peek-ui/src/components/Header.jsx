@@ -1,5 +1,3 @@
-// src/components/Header.jsx
-import React from 'react';
 import logo from '../assets/images/PricePeek.png';
 import '../assets/styles/Header.css';
 
