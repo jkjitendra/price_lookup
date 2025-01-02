@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import DataTable from './DataTable'; 
 import '../assets/styles/Search.css';
 
 const Search = ({products, setProducts }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredProducts, setFilteredProducts] = useState(products);
-  // const products = useSelector(state => state.products.products);
 
   useEffect(() => {
     setFilteredProducts(
@@ -14,9 +13,6 @@ const Search = ({products, setProducts }) => {
       )
     );
   }, [searchTerm, products]);
-
-  // console.log('products in search', products);
-  console.log('filteredProducts in search', filteredProducts);
   
   return (
     <div className="search-wrapper">

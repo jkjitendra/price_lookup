@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import {useState} from 'react';
 import '../assets/styles/SectionList.css';
 import Logout from './Logout';
 
