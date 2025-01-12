@@ -1,21 +1,19 @@
-import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-import LoadingContext from '../context/LoadingContext';
 // import api from '../api/query';
 
 // const LOGOUT_URL = "/logout";
 
-const LogoutContent = () => {
+const Logout = () => {
     const { logout } = useAuth();
     const navigate = useNavigate();
-    const { setLoading } = useContext(LoadingContext);
+    // const { setLoading } = useContext(LoadingContext);
 
     const handleLogout = async () => {        
         const userConfirmed = window.confirm('Are you sure you want to logout?');
         
         if (userConfirmed) {
-            setLoading(true);
+            // setLoading(true);
             try {
                 // Call the backend to clear the HttpOnly cookie
                 // await api.post(LOGOUT_URL);
@@ -27,7 +25,7 @@ const LogoutContent = () => {
             } catch (error) {
                 console.error('Error logging out', error);
             } finally {
-                setLoading(false);
+                // setLoading(false);
             }
         }
     };
@@ -37,10 +35,10 @@ const LogoutContent = () => {
     );
 };
 
-const Logout = () => (
-    <LoadingProvider>
-        <LogoutContent />
-    </LoadingProvider>
-);
+// const Logout = () => (
+//     <LoadingProvider>
+//         <LogoutContent />
+//     </LoadingProvider>
+// );
 
 export default Logout;
