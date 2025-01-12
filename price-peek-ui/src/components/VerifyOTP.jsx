@@ -1,20 +1,20 @@
 import React, { useState, useContext } from "react";
 import axios from "../api/query";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import LoadingContext from "../context/LoadingContext";
+import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { getEmailFromToken } from "../utils/auth/auth.util";
 import useAuth from "../hooks/useAuth";
 
 const VERIFY_OTP_URL = "/verify-email";
 const GENERATE_OTP_URL = "/generate-otp";
 
-const VerifyOTP = () => {
+const VerifyOTPContent = () => {
   const [otp, setOtp] = useState("");
   const [errMsg, setErrMsg] = useState("");
   const { setAuth } = useAuth();
+  const { loading, setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
   const location = useLocation();
-  const { loading, setLoading } = useContext(LoadingContext);
 
   const email = location.state?.email || "";
   const purpose = location.state?.purpose || "";
@@ -143,5 +143,11 @@ const VerifyOTP = () => {
     </div>
   );
 };
+
+const VerifyOTP = () => (
+  <LoadingProvider>
+    <VerifyOTPContent />
+  </LoadingProvider>
+);
 
 export default VerifyOTP;
