@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import axios from '../api/query';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -6,16 +6,20 @@ const GENERATE_OTP_URL = '/generate-otp';
 const CHANGE_PASSWORD_URL = '/change-password';
 const purpose = "forgot_password";
 
-const ForgotPassword = () => {
+const ForgotPasswordContent = () => {
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [password, setPassword] = useState('');
   const [step, setStep] = useState(1);
   const [errMsg, setErrMsg] = useState('');
+  const { setLoading } = useContext(LoadingContext);
+
   const navigate = useNavigate();
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
 
     try {
       const response = await axios.post(GENERATE_OTP_URL, JSON.stringify({ email, purpose }), {
@@ -31,6 +35,8 @@ const ForgotPassword = () => {
       }
     } catch (err) {
       setErrMsg('Failed to process request');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -138,5 +144,12 @@ const ForgotPassword = () => {
     </div>
   );
 };
+
+const ForgotPassword = () => (
+  <LoadingProvider>
+    <ForgotPasswordContent />
+  </LoadingProvider>
+);
+
 
 export default ForgotPassword;
