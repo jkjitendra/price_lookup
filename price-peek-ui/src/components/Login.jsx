@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect, useContext } from "react";
 import useAuth from "../hooks/useAuth";
 import { Link, useNavigate } from "react-router-dom";
-import LoadingContext from "../context/LoadingContext";
+import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { getEmailFromToken } from "../utils/auth/auth.util";
 import axios from "../api/query";
 import logo from '../assets/images/PricePeek.png';
