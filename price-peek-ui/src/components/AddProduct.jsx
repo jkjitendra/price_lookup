@@ -5,7 +5,7 @@ import api from '../api/query';
 
 const CREATE_PRODUCT = '/store-product';
 
-const AddProduct = () => {
+const AddProductContent = () => {
   const accessToken = localStorage.getItem('accessToken');
   const [favName, setFavName] = useState('');
   const [productLink, setProductLink] = useState('');
@@ -106,5 +106,12 @@ const AddProduct = () => {
     </div>
   );
 };
+
+const AddProduct = () => (
+  <LoadingProvider>
+    <AddProductContent />
+  </LoadingProvider>
+);
+
 
 export default AddProduct;
