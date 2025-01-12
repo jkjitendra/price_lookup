@@ -8,7 +8,7 @@ import logo from '../assets/images/PricePeek.png';
 
 const LOGIN_URL = "/login";
 
-const Login = () => {
+const LoginContent = () => {
   const { auth, setAuth } = useAuth();
   const navigate = useNavigate();
   const { setLoading } = useContext(LoadingContext);
@@ -129,6 +129,12 @@ const Login = () => {
       </div>
     </div>
   );
-}
+};
+
+const Login = () => (
+  <LoadingProvider>
+    <LoginContent />
+  </LoadingProvider>
+);
 
 export default Login;
