@@ -6,7 +6,7 @@ import LoadingContext from '../context/LoadingContext';
 
 // const LOGOUT_URL = "/logout";
 
-const Logout = () => {
+const LogoutContent = () => {
     const { logout } = useAuth();
     const navigate = useNavigate();
     const { setLoading } = useContext(LoadingContext);
@@ -36,5 +36,11 @@ const Logout = () => {
         <button onClick={handleLogout} className='logout-btn'>Logout</button>
     );
 };
+
+const Logout = () => (
+    <LoadingProvider>
+        <LogoutContent />
+    </LoadingProvider>
+);
 
 export default Logout;
