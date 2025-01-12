@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import LoadingContext from '../context/LoadingContext';
+import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import '../assets/styles/AddProduct.css';
 import api from '../api/query';
 
