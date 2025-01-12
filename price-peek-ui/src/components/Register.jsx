@@ -1,4 +1,5 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useContext } from "react";
+import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../assets/images/PricePeek.png';
 import axios from "../api/query";
@@ -8,9 +9,10 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REGISTER_URL = "/signup";
 const GENERATE_OTP_URL = '/generate-otp';
 
-const Register = () => {
+const RegisterContent = () => {
   const userRef = useRef();
   const errRef = useRef();
+  const { setLoading } = useContext(LoadingContext);
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -51,6 +53,8 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
     const validPwdMatch = PWD_REGEX.test(pwd);
     const validEmailMatch = EMAIL_REGEX.test(email);
     if (!validPwdMatch || !validEmailMatch) {
@@ -93,6 +97,8 @@ const Register = () => {
         setErrMsg("Registration Failed!");
       }
       errRef.current.focus();
+    }  finally {
+      setLoading(false);
     }
   };
 
@@ -183,6 +189,12 @@ const Register = () => {
       </section>
     </>
   );
-}
+};
+
+const Register = () => (
+  <LoadingProvider>
+    <RegisterContent />
+  </LoadingProvider>
+);
 
 export default Register;
