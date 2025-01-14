@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import '../assets/styles/DataTable.css';
 import EditIcon from '../assets/svgs/EditIcon';
 import DeleteIcon from '../assets/svgs/DeleteIcon';
 import SaveIcon from '../assets/svgs/SaveIcon';
 // import extractProductId from '../utils/extractFromURL';
 import Modal from './Modal';
-import DashIcon from '../assets/svgs/DashIcon';
+// import DashIcon from '../assets/svgs/DashIcon';
 import api from '../api/query';
 
 const DELETE_URL = '/product';
@@ -20,9 +20,9 @@ const DataTable = ({ products, setProducts }) => {
   const editFieldRef = useRef(null);
   const saveIconRef = useRef(null);
 
-  const calculateLowestPrice = (priceList) => {
-    return priceList && priceList.length ? `₹${Math.min(...priceList)}` : <DashIcon />;
-  };
+  // const calculateLowestPrice = (priceList) => {
+  //   return priceList && priceList.length ? `₹${Math.min(...priceList)}` : <DashIcon />;
+  // };
 
   const handleEdit = (product) => {
     setEditingProductId(product.id);
