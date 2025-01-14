@@ -1,11 +1,11 @@
 import { useEffect, useState, useContext } from 'react';
-import LoadingContext from '../context/LoadingContext';
+import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import Search from './Search';
 import api from '../api/query';
 
 const GET_ALL_PRODUCTS_URL = '/get-all-products?per_page=50';
 
-const ProductsList = () => {
+const ProductsListContent = () => {
   const [products, setProducts] = useState([]);
   const { setLoading } = useContext(LoadingContext); // Use global loading context
 
@@ -39,5 +39,11 @@ const ProductsList = () => {
     </div>
   );
 }
+
+const ProductsList = () => (
+  <LoadingProvider>
+    <ProductsListContent />
+  </LoadingProvider>
+);
 
 export default ProductsList;
