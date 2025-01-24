@@ -11,12 +11,13 @@ import api from '../api/query';
 const DELETE_URL = '/product';
 const UPDATE_URL = '/update-product';
 
-const DataTable = ({ products, setProducts }) => {
+const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirection }) => {
 
   const [editingProductId, setEditingProductId] = useState(null);
   const [newTargetPrice, setNewTargetPrice] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
+
   const editFieldRef = useRef(null);
   const saveIconRef = useRef(null);
 
@@ -24,6 +25,7 @@ const DataTable = ({ products, setProducts }) => {
   //   return priceList && priceList.length ? `₹${Math.min(...priceList)}` : <DashIcon />;
   // };
 
+  // Handle editing
   const handleEdit = (product) => {
     setEditingProductId(product.id);
     setNewTargetPrice(product.target_price);
@@ -36,6 +38,7 @@ const DataTable = ({ products, setProducts }) => {
     }, 0);
   };
 
+  // Handle saving
   const handleSave = async (product) => {
     if (product?.target_price === newTargetPrice) {
       setEditingProductId(null);
@@ -74,6 +77,7 @@ const DataTable = ({ products, setProducts }) => {
     }
   };
 
+  // Handle delete
   const handleDelete = (product) => {
     setProductToDelete(product);
     setShowDeleteModal(true);
@@ -107,11 +111,6 @@ const DataTable = ({ products, setProducts }) => {
     window.open(url, '_blank');
   };
 
-  // const handleClickOutside = (event) => {
-  //   if (editFieldRef.current && !editFieldRef.current.contains(event.target)) {
-  //     setEditingProductId(null);
-  //   }
-  // };
   const handleClickOutside = (event) => {
     // Check if the click is outside the editable input or SaveIcon
     if (
@@ -138,12 +137,47 @@ const DataTable = ({ products, setProducts }) => {
           <tr>
             <th></th>
             {/* <th>Image</th> */}
-            <th>Name</th>
+            <th className="sortable">
+              <div>
+                Name
+                <span>
+                <button
+                  style={{ color: sortedField === 'name' && sortDirection === 'asc' ? 'blue' : 'white' }}
+                  onClick={() => handleSort('name')}
+                >
+                  ▲
+                </button>
+                <button
+                  style={{ color: sortedField === 'name' && sortDirection === 'desc' ? 'blue' : 'white' }}
+                  onClick={() => handleSort('name')}
+                >
+                  ▼
+                </button>
+                </span>
+              </div>
+            </th>
             {/* <th>Current Price</th> */}
             {/* <th>Lowest Price</th> */}
-            <th>Target Price</th>
+            <th className="sortable">
+              <div>
+                Target Price 
+                <span>
+                  <button
+                    style={{ color: sortedField === 'target_price' && sortDirection === 'asc' ? 'blue' : 'white' }}
+                    onClick={() => handleSort('target_price')}
+                  >
+                    ▲
+                  </button>
+                  <button
+                    style={{ color: sortedField === 'target_price' && sortDirection === 'desc' ? 'blue' : 'white' }}
+                    onClick={() => handleSort('target_price')}
+                  >
+                    ▼
+                  </button>
+                </span>
+              </div>
+            </th>
             <th>Action</th>
-
           </tr>
         </thead>
         {products.length === 0 && (
@@ -158,7 +192,7 @@ const DataTable = ({ products, setProducts }) => {
         <tbody>
           {products.map((product, index) => (
             <tr key={product.id}>
-              <td style={{color: 'blue', fontWeight: 'bold'}}>{index+1}</td>
+              <td style={{color: 'blue', fontWeight: 'bold'}}>{index + 1}</td>
               {/* <td><img src={product?.image} alt={product?.name} className="product-image" /></td> */}
               <td onClick={() => goToExternalURL(product.url)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>{product?.name}</td>
               {/* <td onClick={() => goToExternalURL(product.url)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>
