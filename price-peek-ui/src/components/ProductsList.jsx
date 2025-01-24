@@ -9,7 +9,6 @@ const ProductsListContent = () => {
   const [products, setProducts] = useState([]);
   const { setLoading } = useContext(LoadingContext); // Use global loading context
 
-
   const accessToken = localStorage.getItem('accessToken');
 
   useEffect(() => {
