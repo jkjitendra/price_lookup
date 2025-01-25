@@ -2,6 +2,7 @@ import { createContext, useState, useEffect } from'react';
 import { useNavigate } from "react-router-dom";
 import { getRolesFromToken, getEmailFromToken } from '../utils/auth/auth.util';
 import { jwtDecode } from 'jwt-decode'; 
+import refreshToken from '../api/refreshToken';
 
 const AuthContext = createContext();
 
@@ -30,22 +31,43 @@ export const AuthProvider = ({ children }) => {
     return {};
   });
 
+  // useEffect(() => {
+  //     // Assuming the token is stored in localStorage
+  //   const token = localStorage.getItem('accessToken');
+  //   if (token && !isTokenExpired(token)) {
+  //   //   const roles = getRolesFromToken(token);
+  //     const roles = ['USER'];
+  //     const email = getEmailFromToken(token);
+  //     setAuth({ email, token, roles });
+  //   } else if (token && isTokenExpired(token)) {
+  //     console.warn('Token has expired. Clearing tokens.');
+  //     localStorage.removeItem('accessToken');
+  //     navigate('/login');
+  //   } else {
+  //     console.info('No token found.');
+  //   }
+  // }, []);
+
   useEffect(() => {
-      // Assuming the token is stored in localStorage
-    const token = localStorage.getItem('accessToken');
-    if (token && !isTokenExpired(token)) {
-    //   const roles = getRolesFromToken(token);
-      const roles = ['USER'];
-      const email = getEmailFromToken(token);
-      setAuth({ email, token, roles });
-    } else if (token && isTokenExpired(token)) {
-      console.warn('Token has expired. Clearing tokens.');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      navigate('/login');
-    } else {
-      console.info('No token found.');
-    }
+    const handleTokenRefresh = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (token && isTokenExpired(token)) {
+        console.warn('Access token expired. Attempting to refresh...');
+        try {
+          const newToken = await refreshToken(); // Call the refresh token function
+          const email = getEmailFromToken(newToken);
+          const roles = ['USER'];
+          setAuth({ email, token: newToken, roles });
+        } catch (err) {
+          console.error('Failed to refresh token:', err);
+          logout(); // Log the user out if refresh fails
+        }
+      } else if (!token) {
+        console.info('No token found.');
+      }
+    };
+
+    handleTokenRefresh();
   }, []);
 
   const logout = (redirectToLogin = true) => {
