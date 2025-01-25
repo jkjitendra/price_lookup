@@ -16,8 +16,8 @@ const LoginContent = () => {
   const userRef = useRef();
   const errRef = useRef();
 
-  const [email, setEmail] = useState('jatwat123@gmail.com');
-  const [pwd, setPwd] = useState('Levelup123@');
+  const [email, setEmail] = useState('');
+  const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
 
   useEffect(() => {
