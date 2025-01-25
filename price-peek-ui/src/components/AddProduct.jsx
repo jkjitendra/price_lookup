@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import '../assets/styles/AddProduct.css';
 import api from '../api/query';
+import { logger } from '../utils/logger';
 
 const CREATE_PRODUCT = '/store-product';
 
@@ -16,6 +17,7 @@ const AddProductContent = () => {
 
 
   const determinePlatform = (url) => {
+    logger.log('Determining platform for URL:', url);
     if (url.includes('amazon')) return 'amazon';
     if (url.includes('flipkart')) return 'flipkart';
     if (url.includes('meesho')) return 'meesho';
@@ -26,12 +28,14 @@ const AddProductContent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    logger.log('Form submitted with values:', { favName, productLink, targetPrice });
 
     const platform = determinePlatform(productLink);
 
     if (platform === 'unknown') {
       setError('Unsupported platform');
       setLoading(false);
+      logger.warn('Unsupported platform for product link:', productLink);
       return;
     }
 
@@ -43,6 +47,7 @@ const AddProductContent = () => {
     };
 
     try {
+      logger.log('Sending API request to create product:', data);
       const response = await api.post(CREATE_PRODUCT, data, {
         headers: {
           'Content-Type': 'application/json',
@@ -52,14 +57,17 @@ const AddProductContent = () => {
 
       if (response.data.success) {
         setSuccess('Product added successfully');
+        logger.log('Product added successfully:', response.data);
         setFavName('');
         setProductLink('');
         setTargetPrice('');
       } else {
         setError('Failed to add product');
+        logger.error('Failed to add product:', response.data);
       }
     } catch (err) {
       setError('An error occurred');
+      logger.error('Error during product creation:', err);
     } finally {
       setLoading(false);
     }

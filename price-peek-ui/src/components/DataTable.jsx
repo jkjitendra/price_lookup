@@ -7,6 +7,7 @@ import SaveIcon from '../assets/svgs/SaveIcon';
 import Modal from './Modal';
 // import DashIcon from '../assets/svgs/DashIcon';
 import api from '../api/query';
+import { logger } from '../utils/logger';
 
 const DELETE_URL = '/product';
 const UPDATE_URL = '/update-product';
@@ -40,9 +41,11 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
 
   // Handle saving
   const handleSave = async (product) => {
+    logger.log('Saving product changes:', product);
     if (product?.target_price === newTargetPrice) {
       setEditingProductId(null);
       setNewTargetPrice('');
+      logger.log('No changes detected in target price.');
       return;
     }
 
@@ -67,11 +70,12 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
             p.id === product.id ? { ...p, target_price: response.data.changes.target_price } : p
           )
         );
+        logger.log('Product updated successfully:', response.data);
       } else {
-        console.error('Failed to update the product');
+        logger.error('Failed to update product:', response.data);
       }
     } catch (error) {
-      console.error('There was an error updating the product!', error);
+      logger.error('Error updating product:', error);
     } finally {
       setEditingProductId(null); // Clear the editing ID after the API call
     }
