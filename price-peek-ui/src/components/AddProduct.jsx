@@ -3,6 +3,7 @@ import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import '../assets/styles/AddProduct.css';
 import api from '../api/query';
 import { logger } from '../utils/logger';
+import { getErrorMessage } from "../utils/error/errorHandler";
 
 const CREATE_PRODUCT = '/store-product';
 
@@ -62,11 +63,15 @@ const AddProductContent = () => {
         setProductLink('');
         setTargetPrice('');
       } else {
-        setError('Failed to add product');
+        // setError('Failed to add product');
+        const errorMsg = getErrorMessage(error);
+        setErrMsg(errorMsg);
         logger.error('Failed to add product:', response.data);
       }
     } catch (err) {
-      setError('An error occurred');
+      // setError('An error occurred');
+      const errorMsg = getErrorMessage(error);
+      setError(errorMsg);
       logger.error('Error during product creation:', err);
     } finally {
       setLoading(false);
@@ -75,6 +80,8 @@ const AddProductContent = () => {
 
   return (
     <div className="add-product-container">
+      {error && <p className="error">{error}</p>}
+      {success && <p className="success">{success}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="favName">Add Name to your Product</label>
@@ -108,9 +115,6 @@ const AddProductContent = () => {
         </div>
         <button type="submit" className="submit-btn">Submit</button>
       </form>
-
-      {error && <p className="error">{error}</p>}
-      {success && <p className="success">{success}</p>}
     </div>
   );
 };

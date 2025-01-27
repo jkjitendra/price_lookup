@@ -1,12 +1,13 @@
 import axios from "axios";
-import { useNavigate } from 'react-router-dom';
 import refreshToken from './refreshToken';
-import useAuth from '../hooks/useAuth';
+// import { getErrorMessage } from '../utils/error/errorHandler';
+
 
 const api = axios.create({
     baseURL: "https://pricepeek.ashutoshviramgama.com/",
 });
 
+// Request interceptor for adding Authorization headers
 api.interceptors.request.use(
   async (config) => {
     const accessToken = localStorage.getItem('accessToken');
@@ -16,40 +17,42 @@ api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.error("Request error:", error);
     return Promise.reject(error);
   }
 );
 
+// Response interceptor for handling errors globally
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const {logout} = useAuth();
-    const navigate = useNavigate();
     const originalRequest = error.config;
-    console.log('Error status:', error);
 
-    // If token expired and the request is not retried
-    if (error.response?.status === 401
-        && error.response?.data?.message === 'Token has expired' 
-        && !originalRequest._retry
+    if (
+      error.response?.status === 401 &&
+      error.response?.data?.message === "Token has expired" &&
+      !originalRequest._retry
     ) {
-      console.log('Token expired, attempting to refresh...');
+      console.log("Token expired, attempting to refresh...");
       originalRequest._retry = true;
       try {
+
         const newAccessToken = await refreshToken();
-        axios.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
-        originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        return api(originalRequest);
-      } catch (err) {
-        console.error('Refresh token expired', err.response?.data || err.messagerr);
-        // Clear tokens and redirect to login
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        logout();
-        navigate("/login") // Redirect to login page
+        localStorage.setItem("accessToken", newAccessToken);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${newAccessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
+        return api(originalRequest); // Retry original request
+
+      } catch (refreshError) {
+
+        console.error("Refresh token failed:", refreshError);
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login"; // Redirect to login
+
       }
     }
-    console.error('API Error:', error.response?.data || error.message);
+    // const errorMessage = getErrorMessage(error);
     return Promise.reject(error);
   }
 );
