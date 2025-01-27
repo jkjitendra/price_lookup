@@ -1,0 +1,31 @@
+export const ERROR_CODES = {
+    NETWORK_ERROR: 'error.network',
+    BAD_REQUEST: 'error.bad-request',
+    UNAUTHORIZED: 'error.unauthorized',
+    FORBIDDEN: 'error.forbidden',
+    NOT_FOUND: 'error.not-found',
+    CONFLICT: 'error.conflict',
+    UNPROCESSABLE_ENTITY: 'error.unprocessable-entity',
+    INTERNAL_SERVER_ERROR: 'error.internal-server-error',
+    INVALID_EMAIL_PASSWORD: 'error.invalid-email-password',
+    EMAIL_ALREADY_IN_USE: 'error.email-already-in-use',
+    EMAIL_NOT_VERIFIED: 'error.email-not-verified',
+    NO_SERVER_RESPONSE: 'error.no-server-response',
+    UNKNOWN_ERROR: 'error.unknown',
+};
+
+export const ERROR_MESSAGES = {
+    [ERROR_CODES.NETWORK_ERROR]: 'Network error: Please check your internet connection.',
+    [ERROR_CODES.BAD_REQUEST]: 'Bad Request: Please check the input and try again.',
+    [ERROR_CODES.UNAUTHORIZED]: 'Unauthorized: Please log in to continue.',
+    [ERROR_CODES.FORBIDDEN]: 'Forbidden: You do not have permission to perform this action.',
+    [ERROR_CODES.NOT_FOUND]: 'Resource not found. Please try again later.',
+    [ERROR_CODES.CONFLICT]: 'The resource already exists.',
+    [ERROR_CODES.UNPROCESSABLE_ENTITY]: 'Please correct the highlighted fields and try again.',
+    [ERROR_CODES.INTERNAL_SERVER_ERROR]: 'Internal server error: Something went wrong on our side.',
+    [ERROR_CODES.INVALID_EMAIL_PASSWORD]: 'Invalid email or password. Please try again.',
+    [ERROR_CODES.EMAIL_ALREADY_IN_USE]: 'The email address is already in use.',
+    [ERROR_CODES.EMAIL_NOT_VERIFIED]: 'Email is not verified. Please verify your email to proceed.',
+    [ERROR_CODES.NO_SERVER_RESPONSE]: 'No response from the server. Please try again later.',
+    [ERROR_CODES.UNKNOWN_ERROR]: 'An unexpected error occurred. Please try again later.',
+};
