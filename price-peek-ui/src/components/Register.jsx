@@ -3,11 +3,13 @@ import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { Link, useNavigate } from "react-router-dom";
 import logo from '../assets/images/PricePeek.png';
 import axios from "../api/query";
+import { getErrorMessage } from "../utils/error/errorHandler";
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const REGISTER_URL = "/signup";
 const GENERATE_OTP_URL = '/generate-otp';
+const purpose = "verify_email";
 
 const RegisterContent = () => {
   const userRef = useRef();
@@ -31,25 +33,30 @@ const RegisterContent = () => {
   
   const [errMsg, setErrMsg] = useState('');
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
+  // useEffect(() => {
+  //   userRef.current.focus();
+  // }, []);
 
-  useEffect(() => {
-    const result = PWD_REGEX.test(pwd);
-    setValidPwd(result);
-    const match = pwd === confirmPwd;
-    setValidConfirmPwd(match);
-  }, [pwd, confirmPwd]);
+  // useEffect(() => {
+  //   const result = PWD_REGEX.test(pwd);
+  //   setValidPwd(result);
+  //   const match = pwd === confirmPwd;
+  //   setValidConfirmPwd(match);
+  // }, [pwd, confirmPwd]);
 
-  useEffect(() => {
-    const result = EMAIL_REGEX.test(email);
-    setValidEmail(result);
-  }, [email]);
+  // useEffect(() => {
+  //   const result = EMAIL_REGEX.test(email);
+  //   setValidEmail(result);
+  // }, [email]);
 
-  useEffect(() => {
-    setErrMsg('');
-  }, [ pwd, confirmPwd, email]);
+  // useEffect(() => {
+  //   setErrMsg('');
+  // }, [ pwd, confirmPwd, email]);
+  useEffect(() => userRef.current.focus(), []);
+  useEffect(() => setValidPwd(PWD_REGEX.test(pwd)), [pwd]);
+  useEffect(() => setValidConfirmPwd(pwd === confirmPwd), [pwd, confirmPwd]);
+  useEffect(() => setValidEmail(EMAIL_REGEX.test(email)), [email]);
+  useEffect(() => setErrMsg(''), [pwd, confirmPwd, email]);
 
   const handleRegister = async (e) => {
     e.preventDefault();
@@ -57,8 +64,13 @@ const RegisterContent = () => {
 
     const validPwdMatch = PWD_REGEX.test(pwd);
     const validEmailMatch = EMAIL_REGEX.test(email);
-    if (!validPwdMatch || !validEmailMatch) {
-      setErrMsg('Please enter valid information in all fields');
+    // if (!validPwdMatch || !validEmailMatch) {
+    //   setErrMsg('Please enter valid information in all fields');
+    //   return;
+    // }
+
+    if (!validPwd || !validEmail) {
+      setErrMsg('Please provide valid inputs.');
       return;
     }
 
@@ -70,7 +82,7 @@ const RegisterContent = () => {
       // setSuccess(true);
       if (response.data.success) {
         // Call the generate-otp endpoint
-        await axios.post(GENERATE_OTP_URL, JSON.stringify({ email }), {
+        await axios.post(GENERATE_OTP_URL, JSON.stringify({ email, purpose }), {
           headers: { 'Content-Type': 'application/json' },
         });
         navigate('/verify-otp', { state: { email } });
@@ -78,24 +90,27 @@ const RegisterContent = () => {
         setErrMsg("Registration Failed!");
       }
     } catch (error) {
-      if (!error.response) {
-        setErrMsg("No Server Response");
-      } else if (error.response?.status === 409) {
-        setErrMsg("Email already in use");
-      } else if (error.response?.status === 404) {
-        const specificMsg = error.response?.data?.message?.split(':')[0];
-        setErrMsg(specificMsg);
-      } else if (error.response?.status === 422) {
-        const emailErrors = error.response?.data?.errors?.email || [];
-        console.log(emailErrors);
-        if (emailErrors[0] === 'The email has already been taken.') {
-          setErrMsg("Email already in use!");
-        } else {
-          setErrMsg("Registration Failed!");
-        }
-      } else {
-        setErrMsg("Registration Failed!");
-      }
+      // if (!error.response) {
+      //   setErrMsg("No Server Response");
+      // } else if (error.response?.status === 409) {
+      //   setErrMsg("Email already in use");
+      // } else if (error.response?.status === 404) {
+      //   const specificMsg = error.response?.data?.message?.split(':')[0];
+      //   setErrMsg(specificMsg);
+      // } else if (error.response?.status === 422) {
+      //   const emailErrors = error.response?.data?.errors?.email || [];
+      //   console.log(emailErrors);
+      //   if (emailErrors[0] === 'The email has already been taken.') {
+      //     setErrMsg("Email already in use!");
+      //   } else {
+      //     setErrMsg("Registration Failed!");
+      //   }
+      // } else {
+      //   setErrMsg("Registration Failed!");
+      // }
+      console.error("Register Error:", error);
+      const errorMsg = getErrorMessage(error);
+      setErrMsg(errorMsg);
       errRef.current.focus();
     }  finally {
       setLoading(false);

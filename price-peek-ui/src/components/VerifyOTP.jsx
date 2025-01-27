@@ -4,6 +4,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { getEmailFromToken } from "../utils/auth/auth.util";
 import useAuth from "../hooks/useAuth";
+import { getErrorMessage } from "../utils/error/errorHandler";
 
 const VERIFY_OTP_URL = "/verify-email";
 const GENERATE_OTP_URL = "/generate-otp";
@@ -58,7 +59,8 @@ const VerifyOTPContent = () => {
       }
     } catch (err) {
       console.log(err);
-      setErrMsg("Failed to verify OTP");
+      // setErrMsg("Failed to verify OTP");
+      setErrMsg(getErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -82,7 +84,8 @@ const VerifyOTPContent = () => {
         setErrMsg(response.data.message);
       }
     } catch (err) {
-      setErrMsg("Failed to resend OTP");
+      // setErrMsg("Failed to resend OTP");
+      setErrMsg(getErrorMessage(error));
     } finally {
       setLoading(false);
     }

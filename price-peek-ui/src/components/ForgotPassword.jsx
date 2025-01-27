@@ -2,6 +2,7 @@ import { useState, useContext } from 'react';
 import axios from '../api/query';
 import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { Link, useNavigate } from 'react-router-dom';
+import { getErrorMessage } from "../utils/error/errorHandler";
 
 const GENERATE_OTP_URL = '/generate-otp';
 const CHANGE_PASSWORD_URL = '/change-password';
@@ -29,13 +30,14 @@ const ForgotPasswordContent = () => {
 
       if (response.data.success) {
         setStep(2);
-        // navigate('/verify-otp', { state: { email, purpose } });
         setErrMsg('');
       } else {
         setErrMsg(response.data.message);
       }
     } catch (err) {
-      setErrMsg('Failed to process request');
+      console.error("Forgot Password Error:", error);
+      const errorMsg = getErrorMessage(error);
+      setErrMsg(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -54,7 +56,9 @@ const ForgotPasswordContent = () => {
         setErrMsg(response.data.message);
       }
     } catch (err) {
-      setErrMsg('Failed to resend OTP');
+      // setErrMsg('Failed to resend OTP');
+      const errorMsg = getErrorMessage(error);
+      setErrMsg(errorMsg);
     }
   };
 
@@ -72,7 +76,9 @@ const ForgotPasswordContent = () => {
         setErrMsg(response.data.message);
       }
     } catch (err) {
-      setErrMsg('Failed to change password');
+      console.error("Change Password Error:", error);
+      const errorMsg = getErrorMessage(error);
+      setErrMsg(errorMsg);
     }
   };
 

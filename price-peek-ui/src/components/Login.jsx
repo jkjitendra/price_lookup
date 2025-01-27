@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import { getEmailFromToken } from "../utils/auth/auth.util";
 import axios from "../api/query";
+import { getErrorMessage } from "../utils/error/errorHandler";
 import logo from '../assets/images/PricePeek.png';
 
 const LOGIN_URL = "/login";
@@ -20,13 +21,16 @@ const LoginContent = () => {
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
 
-  useEffect(() => {
-    userRef.current.focus();
-  }, []);
+  // useEffect(() => {
+  //   userRef.current.focus();
+  // }, []);
 
-  useEffect(() => {
-    setErrMsg('');
-  }, [email, pwd]);
+  // useEffect(() => {
+  //   setErrMsg('');
+  // }, [email, pwd]);
+
+  useEffect(() => userRef.current.focus(), []);
+  useEffect(() => setErrMsg(''), [email, pwd]);
 
   useEffect(() => {
     if (auth?.email) {
@@ -41,7 +45,6 @@ const LoginContent = () => {
     try {
       const response = await axios.post(LOGIN_URL, JSON.stringify({ email, password: pwd }), {
         headers: { 'Content-Type': 'application/json' },
-        // withCredentials: true, // This sends the cookie with the request
       });
 
       if (response?.data) {
@@ -56,30 +59,33 @@ const LoginContent = () => {
         setEmail('');
         setPwd('');
         navigate('/home');
-      } else {
-        throw new Error('No data in response');
       }
-    } catch (err) {
-      console.error('ye rha error', err);
-      if (!err.response) {
-        setErrMsg('No Server Response');
-      } else if (err.response?.status === 400) {
-        setErrMsg('Missing email or password');
-      } else if (err.response?.status === 401 && err.response?.data?.message === 'Invalid email or password') {
-        setErrMsg('Invalid email or password');
-      } else if (err.response?.status === 422) {
-        const passwordErrors = err.response?.data?.errors?.password || [];
-        const emailErrors = err.response?.data?.errors?.email || [];
-        setErrMsg(
-          passwordErrors.includes('The password must be at least 6 characters.')
-            ? passwordErrors.join(' ')
-            : emailErrors.join(' ')
-        );
-      } else if (err.response?.status === 403 && err.response?.data?.message === 'Email is not verified') {
-        navigate('/verify-otp', { state: { email } }); // Redirect to OTP verification page if email is not verified
-      } else {
-        setErrMsg('Login Failed');
-      }
+    } catch (error) {
+      // console.error('ye rha error', err);
+      // if (!err.response) {
+      //   setErrMsg('No Server Response');
+      // } else if (err.response?.status === 400) {
+      //   setErrMsg('Missing email or password');
+      // } else if (err.response?.status === 401 && err.response?.data?.message === 'Invalid email or password') {
+      //   setErrMsg('Invalid email or password');
+      // } else if (err.response?.status === 422) {
+      //   const passwordErrors = err.response?.data?.errors?.password || [];
+      //   const emailErrors = err.response?.data?.errors?.email || [];
+      //   setErrMsg(
+      //     passwordErrors.includes('The password must be at least 6 characters.')
+      //       ? passwordErrors.join(' ')
+      //       : emailErrors.join(' ')
+      //   );
+      // } else if (err.response?.status === 403 && err.response?.data?.message === 'Email is not verified') {
+      //   navigate('/verify-otp', { state: { email } }); // Redirect to OTP verification page if email is not verified
+      // } else {
+      //   setErrMsg('Login Failed');
+      // }
+      console.log("Error Object:", error);
+      console.log("Error Response:", error?.message);
+      // console.error("Login Error:", error);
+      const errorMsg = getErrorMessage(error);
+      setErrMsg(errorMsg);
       errRef.current.focus();
     } finally {
       setLoading(false);
@@ -90,6 +96,9 @@ const LoginContent = () => {
     <div className="flex items-center justify-center min-h-screen bg-blue-600">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-[50px] shadow-[10px_10px_35px_#FEC924]">
         <img src={logo} alt="Logo" className="mx-auto w-24" />
+        <p ref={errRef} className={errMsg ? 'text-red-500' : 'hidden'} aria-live="assertive">
+          {errMsg}
+        </p>
         <form className="mt-8 space-y-6" onSubmit={handleLogin}>
           <div>
             <label htmlFor="login-email" className="block text-sm font-medium text-gray-700">Email</label>
@@ -122,9 +131,6 @@ const LoginContent = () => {
           <div className="text-center">
             <Link to="/forgot-password" className="text-sm text-blue-500">Forgot Password?</Link>
           </div>
-          <p ref={errRef} className={errMsg ? 'text-red-500' : 'hidden'} aria-live="assertive">
-            {errMsg}
-          </p>
         </form>
       </div>
     </div>

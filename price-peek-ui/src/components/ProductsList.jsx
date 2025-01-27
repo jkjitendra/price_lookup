@@ -5,6 +5,7 @@ import DataTable from './DataTable';
 import api from '../api/query';
 import '../assets/styles/ProductsList.css';
 import { logger } from '../utils/logger';
+import { getErrorMessage } from "../utils/error/errorHandler";
 
 const GET_ALL_PRODUCTS_URL = '/get-all-products?per_page=50';
 
@@ -13,6 +14,7 @@ const ProductsListContent = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortState, setSortState] = useState({ field: null, direction: null });
   const [searchTerm, setSearchTerm] = useState('');
+  const [errMsg, setErrMsg] = useState('');
   const { setLoading } = useContext(LoadingContext); // Use global loading context
 
   const accessToken = localStorage.getItem('accessToken');
@@ -33,8 +35,9 @@ const ProductsListContent = () => {
         setFilteredProducts(data);
         logger.log('Fetched products successfully:', data);
       } catch (error) {
-        console.error('Error fetching products', error);
         logger.error('Error fetching products:', error);
+        const errorMsg = getErrorMessage(error);
+        setErrMsg(errorMsg);
       } finally {
         setLoading(false);
       }
@@ -83,6 +86,9 @@ const ProductsListContent = () => {
 
   return (
     <div className="products-list">
+      {errMsg && (
+        <p className="text-red-500 text-center mb-4">{errMsg}</p>
+      )}
       <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
       <DataTable
         products={filteredProducts}
