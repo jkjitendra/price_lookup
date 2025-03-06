@@ -87,8 +87,13 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
     setShowDeleteModal(true);
   };
 
-  const confirmDelete = async (product) => {
-    const productId = product.id;
+  const confirmDelete = async () => {
+  
+    if (!productToDelete?.id) {
+      console.error("Product ID is undefined. Cannot delete.");
+      return;
+    }
+    const productId = productToDelete.id;
     
     const accessToken = localStorage.getItem('accessToken');
     try {
