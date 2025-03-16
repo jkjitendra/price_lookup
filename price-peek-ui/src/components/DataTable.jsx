@@ -243,7 +243,9 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
                       <EditIcon onClick={() => handleEdit(product)} />
                     </>
                   )}
-                  <DeleteIcon onClick={() => handleDelete(product)} />
+                  {editingProductId !== product.id && (
+                    <DeleteIcon onClick={() => handleDelete(product)} />
+                  )}
                 </div>
               </td>
             </tr>
