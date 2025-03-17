@@ -89,7 +89,10 @@ const ProductsListContent = () => {
       {errMsg && (
         <p className="text-red-500 text-center mb-4">{errMsg}</p>
       )}
-      <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+      />
       <DataTable
         products={filteredProducts}
         setProducts={setProducts}
