@@ -149,20 +149,12 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
             <th className="sortable">
               <div>
                 Name
-                <span>
                 <button
-                  style={{ color: sortedField === 'name' && sortDirection === 'asc' ? 'blue' : 'white' }}
+                  style={{ color: '#FFD700', border: 'none', background: 'none', fontSize: '16px' }}
                   onClick={() => handleSort('name')}
                 >
-                  ▲
+                  {sortedField === 'name' && sortDirection === 'asc' ? '▲' : '▼'}
                 </button>
-                <button
-                  style={{ color: sortedField === 'name' && sortDirection === 'desc' ? 'blue' : 'white' }}
-                  onClick={() => handleSort('name')}
-                >
-                  ▼
-                </button>
-                </span>
               </div>
             </th>
             {/* <th>Current Price</th> */}
@@ -170,23 +162,15 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
             <th className="sortable">
               <div>
                 Target Price 
-                <span>
-                  <button
-                    style={{ color: sortedField === 'target_price' && sortDirection === 'asc' ? 'blue' : 'white' }}
-                    onClick={() => handleSort('target_price')}
-                  >
-                    ▲
-                  </button>
-                  <button
-                    style={{ color: sortedField === 'target_price' && sortDirection === 'desc' ? 'blue' : 'white' }}
-                    onClick={() => handleSort('target_price')}
-                  >
-                    ▼
-                  </button>
-                </span>
+                <button
+                  style={{ color: '#FFD700', border: 'none', background: 'none', fontSize: '16px' }}
+                  onClick={() => handleSort('target_price')}
+                >
+                  {sortedField === 'target_price' && sortDirection === 'asc' ? '▲' : '▼'}
+                </button>
               </div>
             </th>
-            <th>Action</th>
+            <th>Update Product</th>
           </tr>
         </thead>
         {products.length === 0 && (
@@ -200,13 +184,10 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
         )}
         <tbody>
           {products.map((product, index) => (
-            <tr key={product.id}>
+            <tr key={`${product.id}-${index}`}>
               <td style={{color: 'blue', fontWeight: 'bold'}}>{index + 1}</td>
               {/* <td><img src={product?.image} alt={product?.name} className="product-image" /></td> */}
               <td onClick={() => goToExternalURL(product.url)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>{product?.name}</td>
-              {/* <td onClick={() => goToExternalURL(product.url)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>
-                {extractProductId(product.url)}
-              </td> */}
               {/* <td>₹{product?.price}</td> */}
               {/* <td>{calculateLowestPrice(product?.price_list)}</td> */}
               <td>
