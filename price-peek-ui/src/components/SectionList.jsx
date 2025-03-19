@@ -1,6 +1,5 @@
 import {useState} from 'react';
 import '../assets/styles/SectionList.css';
-import Logout from './Logout';
 
 const SectionList = ({ setActiveSection }) => {
 
@@ -14,19 +13,18 @@ const SectionList = ({ setActiveSection }) => {
   return (
     <div className="section-list">
       <nav>
-      <button
+      <span
           onClick={() => handleSetActiveSection('productsList')}
           className={`nav-link ${activeLink === 'productsList' ? 'active' : ''}`}
         >
           Products
-        </button>
-        <button
+        </span>
+        <span
           onClick={() => handleSetActiveSection('addproduct')}
           className={`nav-link ${activeLink === 'addproduct' ? 'active' : ''}`}
         >
           Add Product
-        </button>
-        <Logout />
+        </span>
       </nav>
     </div>
   );
