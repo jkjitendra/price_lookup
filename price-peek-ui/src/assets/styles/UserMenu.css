@@ -1,0 +1,55 @@
+/* User Menu */
+.user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  transition: color 0.3s ease;
+}
+
+.user-icon:hover {
+  color: #007bff;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 40px;
+  left: -8.5rem;
+  /* right: -9px; */
+  width: 180px;
+  background: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+.menu-item {
+  background: none;
+  border: none;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.3s ease;
+}
+
+.menu-item:hover {
+  background: #1c81a5;
+}
+
+.logout {
+  color: red;
+  font-weight: bold;
+}
