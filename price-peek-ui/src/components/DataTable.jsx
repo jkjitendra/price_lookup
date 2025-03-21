@@ -5,7 +5,6 @@ import DeleteIcon from '../assets/svgs/DeleteIcon';
 import SaveIcon from '../assets/svgs/SaveIcon';
 // import extractProductId from '../utils/extractFromURL';
 import Modal from './Modal';
-// import DashIcon from '../assets/svgs/DashIcon';
 import api from '../api/query';
 import { logger } from '../utils/logger';
 
@@ -16,22 +15,20 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
 
   const [editingProductId, setEditingProductId] = useState(null);
   const [newTargetPrice, setNewTargetPrice] = useState('');
+  const [newProductName, setNewProductName] = useState('');
+
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [productToDelete, setProductToDelete] = useState(null);
 
   const editFieldRef = useRef(null);
+  const nameFieldRef = useRef(null);
   const saveIconRef = useRef(null);
 
-  // const calculateLowestPrice = (priceList) => {
-  //   return priceList && priceList.length ? `₹${Math.min(...priceList)}` : <DashIcon />;
-  // };
-
-  // Handle editing
   const handleEdit = (product) => {
     setEditingProductId(product.id);
+    setNewProductName(product.name);
     setNewTargetPrice(product.target_price);
 
-    // Focus the input field after setting editingProductId
     setTimeout(() => {
       if (editFieldRef.current) {
         editFieldRef.current.focus();
@@ -39,13 +36,13 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
     }, 0);
   };
 
-  // Handle saving
   const handleSave = async (product) => {
     logger.log('Saving product changes:', product);
-    if (product?.target_price === newTargetPrice) {
+    if (product?.target_price === newTargetPrice && product?.name === newProductName) {
       setEditingProductId(null);
+      setNewProductName('');
       setNewTargetPrice('');
-      logger.log('No changes detected in target price.');
+      logger.log('No changes detected.');
       return;
     }
 
@@ -54,7 +51,7 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
     try {
 
       const response = await api.put(`${UPDATE_URL}/${product.id}`, {
-        name: product.name,
+        name: newProductName,
         product_link: product.url,
         target_price: newTargetPrice,
         product_platform: product.platform
@@ -67,7 +64,13 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
       if (response.data.success) {
         setProducts((prevProducts) =>
           prevProducts.map((p) =>
-            p.id === product.id ? { ...p, target_price: response.data.changes.target_price } : p
+            p.id === product.id
+              ? {
+                  ...p,
+                  name: newProductName,
+                  target_price: response.data.changes.target_price || p.target_price
+                }
+              : p
           )
         );
         logger.log('Product updated successfully:', response.data);
@@ -77,7 +80,8 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
     } catch (error) {
       logger.error('Error updating product:', error);
     } finally {
-      setEditingProductId(null); // Clear the editing ID after the API call
+      setEditingProductId(null);
+      setNewProductName('');
     }
   };
 
@@ -121,15 +125,17 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
   };
 
   const handleClickOutside = (event) => {
-    // Check if the click is outside the editable input or SaveIcon
     if (
-      editFieldRef.current &&
-      !editFieldRef.current.contains(event.target) &&
-      saveIconRef.current &&
-      !saveIconRef.current.contains(event.target)
+      (editFieldRef.current &&
+        editFieldRef.current.contains(event.target))
+      || (nameFieldRef.current && 
+        nameFieldRef.current.contains(event.target))
+      ||(saveIconRef.current &&
+        saveIconRef.current.contains(event.target))
     ) {
-      setEditingProductId(null);
+      return;
     }
+    setEditingProductId(null);
   };
 
   useEffect(() => {
@@ -145,7 +151,6 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
         <thead>
           <tr>
             <th></th>
-            {/* <th>Image</th> */}
             <th className="sortable">
               <div>
                 Name
@@ -157,8 +162,6 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
                 </button>
               </div>
             </th>
-            {/* <th>Current Price</th> */}
-            {/* <th>Lowest Price</th> */}
             <th className="sortable">
               <div>
                 Target Price 
@@ -186,17 +189,30 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
           {products.map((product, index) => (
             <tr key={`${product.id}-${index}`}>
               <td style={{color: 'blue', fontWeight: 'bold'}}>{index + 1}</td>
-              {/* <td><img src={product?.image} alt={product?.name} className="product-image" /></td> */}
-              <td onClick={() => goToExternalURL(product.url)} style={{ cursor: 'pointer', textDecoration: 'underline', color: 'blue' }}>{product?.name}</td>
-              {/* <td>₹{product?.price}</td> */}
-              {/* <td>{calculateLowestPrice(product?.price_list)}</td> */}
+              <td>
+                {editingProductId === product.id ? (
+                  <input
+                    type="text"
+                    ref={nameFieldRef}
+                    value={newProductName}
+                    onChange={(e) => setNewProductName(e.target.value)}
+                    className="editable-input"
+                  />
+                ) : (
+                  <span
+                    onClick={() => goToExternalURL(product.url)}
+                    style={{ cursor: "pointer", textDecoration: "underline", color: "blue" }}
+                  >
+                    {product?.name}
+                  </span>
+                )}
+              </td>
               <td>
                 {editingProductId === product.id ? (
                   <input
                     type="number"
                     ref={editFieldRef}
                     value={newTargetPrice}
-                    // onChange={(e) => setNewTargetPrice(e.target.value)}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (/^\d*$/.test(value) || value === '') { // Regex to allow only digits
@@ -220,7 +236,6 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
                     </div>
                   ) : (
                     <>
-                      {/* {console.log("EditIcon rendered for product:", product.id)} */}
                       <EditIcon onClick={() => handleEdit(product)} />
                     </>
                   )}
