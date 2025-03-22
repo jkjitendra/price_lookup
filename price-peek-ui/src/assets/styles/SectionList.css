@@ -1,32 +1,6 @@
 /* SectionList.css */
 
-.section-list {
-  /* background-color: #f8f8f8; */
-  padding: 10px;
-  display: flex;
-  align-items: center;
-}
-
-.nav-link {
-  margin-right: 15px;
-  text-decoration: none;
-  color: #000000;
-  border: none;
-  cursor: pointer;
-  font-size: inherit;
-  padding: 10px 20px;
-  transition: background-color 0.3s ease;
-}
-
-.nav-link.active {
-  color: #333;
-}
-
-.nav-link:hover {
-  color: #000;
-}
-
-.search-input {
+/* .search-input {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -34,18 +8,5 @@
   margin-left: auto;
   margin-right: 15px;
   width: 200px;
-}
+} */
 
-.logout-btn {
-  margin-left: 12.9rem;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 5px;
-  background-color: #ff4d4d;
-  color: white;
-  cursor: pointer;
-}
-
-.logout-btn:hover {
-  background-color: #ff0000;
-}
