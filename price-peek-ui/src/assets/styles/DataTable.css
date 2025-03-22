@@ -2,7 +2,7 @@
   width: 100%;
   max-height: 448px; /* Set the height for the scrollable table */
   overflow-y: auto; /* Enable vertical scrolling */
-  border-radius: 8px;
+  border-radius: 15px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border: 1px solid #ddd;
 }
@@ -15,6 +15,10 @@
 .data-table th, .data-table td {
   padding: 8px;
   text-align: center;
+}
+
+.product-name{
+  text-align: left !important;
 }
 
 .data-table thead {
