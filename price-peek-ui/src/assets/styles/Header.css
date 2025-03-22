@@ -26,40 +26,49 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  padding: 5px 15px;
   background: linear-gradient(to right, #ffffff, #f8f9fa);
-  height: 60px;
+  height: 65px;
   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15);
 }
 
 .header-left {
   display: flex;
   align-items: center;
-  gap: 20px;
+  justify-content: flex-start;
+  flex: 1;
 }
 
 .logo {
-  height: 40px;
+  height: 55px;
   width: auto;
 }
 
-/* .nav-link {
-  padding: 8px 12px;
-  border: none;
-  background: transparent;
-  font-size: 16px;
+.header-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.brand-name {
+  font-size: 32px;
+  font-weight: bold;
+  color: #255faa;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.nav-link.active {
-  font-weight: bold;
-  color: dodgerblue;
+.brand-name:hover {
+  color: #007bff;  /* Changes color on hover */
 }
 
-.nav-link:hover {
-  color: #007bff;
-} */
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 1;
+}
 
 .user-menu {
   display: flex;
