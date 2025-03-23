@@ -1,21 +1,23 @@
 import { useEffect, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
-import SearchBar from './SearchBar';
 import DataTable from './DataTable';
 import api from '../api/query';
 import '../assets/styles/ProductsList.css';
 import { logger } from '../utils/logger';
 import { getErrorMessage } from "../utils/error/errorHandler";
+import { FaSearch } from "react-icons/fa";
 
 const GET_ALL_PRODUCTS_URL = '/get-all-products?per_page=50';
 
-const ProductsListContent = () => {
+const ProductsListContent = ({setActiveSection}) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [sortState, setSortState] = useState({ field: null, direction: null });
   const [searchTerm, setSearchTerm] = useState('');
   const [errMsg, setErrMsg] = useState('');
   const { setLoading } = useContext(LoadingContext); // Use global loading context
+  const navigate = useNavigate();
 
   const accessToken = localStorage.getItem('accessToken');
 
@@ -89,10 +91,28 @@ const ProductsListContent = () => {
       {errMsg && (
         <p className="text-red-500 text-center mb-4">{errMsg}</p>
       )}
-      <SearchBar
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
+      <div className='search-add-container'>
+        <div className="search-container">
+          <input
+            type="text"
+            id="searchProduct" 
+            name="searchProduct"
+            placeholder="Search Product Name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="search-input"
+          />
+          <button className="search-icon" onClick={() => {}}>
+            <FaSearch />
+          </button>
+        </div>
+        <button
+          onClick={() => setActiveSection('addproduct')}
+          className='add-product-btn'
+        >
+          Add Product <span className="circle">+</span>
+        </button>
+      </div>
       <DataTable
         products={filteredProducts}
         setProducts={setProducts}
@@ -104,9 +124,9 @@ const ProductsListContent = () => {
   );
 }
 
-const ProductsList = () => (
+const ProductsList = ({setActiveSection}) => (
   <LoadingProvider>
-    <ProductsListContent />
+    <ProductsListContent setActiveSection={setActiveSection}/>
   </LoadingProvider>
 );
 
