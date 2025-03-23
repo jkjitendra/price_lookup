@@ -1,5 +1,4 @@
 import { useEffect, useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import LoadingContext, { LoadingProvider } from "../context/LoadingContext";
 import DataTable from './DataTable';
 import api from '../api/query';
@@ -17,7 +16,6 @@ const ProductsListContent = ({setActiveSection}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [errMsg, setErrMsg] = useState('');
   const { setLoading } = useContext(LoadingContext); // Use global loading context
-  const navigate = useNavigate();
 
   const accessToken = localStorage.getItem('accessToken');
 
