@@ -189,7 +189,7 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
           {products.map((product, index) => (
             <tr key={`${product.id}-${index}`}>
               <td style={{color: 'blue', fontWeight: 'bold'}}>{index + 1}</td>
-              <td>
+              <td className='product-name'>
                 {editingProductId === product.id ? (
                   <input
                     type="text"
@@ -197,6 +197,9 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
                     value={newProductName}
                     onChange={(e) => setNewProductName(e.target.value)}
                     className="editable-input"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSave(product);
+                    }}
                   />
                 ) : (
                   <span
