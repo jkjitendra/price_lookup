@@ -152,7 +152,7 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
           <tr>
             <th></th>
             <th className="sortable">
-              <div>
+              <div style={{ justifyContent: 'flex-start' }}>
                 Name
                 <button
                   style={{ color: '#FFD700', border: 'none', background: 'none', fontSize: '16px' }}
