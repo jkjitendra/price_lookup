@@ -32,7 +32,7 @@ const UserMenu = () => {
   return (
     <div className="user-menu" ref={menuRef}>
       <button ref={buttonRef} className="user-icon" onClick={toggleMenu}>
-        <FaUserCircle size={32} />
+        <FaUserCircle size={45} />
       </button>
 
       {isOpen && (
