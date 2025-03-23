@@ -13,18 +13,18 @@ const SectionList = ({ setActiveSection }) => {
   return (
     <div className="section-list">
       <nav>
-      <span
+        <span
           onClick={() => handleSetActiveSection('productsList')}
           className={`nav-link ${activeLink === 'productsList' ? 'active' : ''}`}
         >
-          Products
+          Price Peek
         </span>
-        <span
+        {/* <span
           onClick={() => handleSetActiveSection('addproduct')}
           className={`nav-link ${activeLink === 'addproduct' ? 'active' : ''}`}
         >
           Add Product
-        </span>
+        </span> */}
       </nav>
     </div>
   );
