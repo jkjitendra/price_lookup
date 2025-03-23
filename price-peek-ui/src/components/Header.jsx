@@ -1,18 +1,35 @@
-import { useState } from 'react';
-import logo from '../assets/images/PricePeek.png';
+import { useNavigate } from 'react-router-dom';
+import logo from '../assets/images/PricePeek.jpg';
 import UserMenu from './UserMenu';
-import SectionList from './SectionList';
 
 import '../assets/styles/Header.css';
 
 const Header = ({setActiveSection}) => {
+  const navigate = useNavigate();
+
   return (
     <header className="header">
       <div className="header-left">
-        <img src={logo} alt="Price Peek Logo" className="logo" />
-        <SectionList setActiveSection={setActiveSection} />
+        <img 
+          src={logo} 
+          alt="Price Peek Logo" 
+          className="logo" 
+          onClick={() => navigate('/home')}
+        />
+        {/* <SectionList setActiveSection={setActiveSection} className='' /> */}
       </div>
-      <UserMenu />
+      <div className="header-center">
+        <span 
+          className="brand-name"
+          onClick={() => {
+            setActiveSection('productsList');
+            navigate('/home')
+          }}
+        >Price Peek</span>
+      </div>
+      <div className="header-right">
+        <UserMenu />
+      </div>
     </header>
   );
 };
