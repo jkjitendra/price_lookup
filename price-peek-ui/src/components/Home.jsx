@@ -11,7 +11,7 @@ const Home = () => {
     <div className="home-container">
       <Header setActiveSection={setActiveSection} />
       <div className="content no-scroll">
-        {activeSection === 'productsList' && <ProductsList />}
+        {activeSection === 'productsList' && <ProductsList setActiveSection={setActiveSection}/>}
         {activeSection === 'addproduct' && <AddProduct />}
       </div>
     </div>
