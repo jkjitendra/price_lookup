@@ -36,7 +36,7 @@ const Logout = ({ onBeforeLogout }) => {
     };
 
     return (
-        <button onClick={handleLogout} className='logout-btn'>Logout</button>
+        <button onClick={handleLogout} className='menu-item logout'>Logout</button>
     );
 };
 
