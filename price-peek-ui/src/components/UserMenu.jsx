@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaUserCircle } from "react-icons/fa";
+import Logout from "./Logout";
 import "../assets/styles/UserMenu.css";
 
 const UserMenu = () => {
@@ -10,6 +11,7 @@ const UserMenu = () => {
   const toggleMenu = () => {
     setIsOpen((prev) => !prev);
   };
+  const closeMenu = () => setIsOpen(false); 
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -19,7 +21,7 @@ const UserMenu = () => {
         buttonRef.current &&
         !buttonRef.current.contains(event.target)
       ) {
-        setIsOpen(false);
+        closeMenu();
       }
     };
 
@@ -40,7 +42,7 @@ const UserMenu = () => {
           <button className="menu-item">Update Profile</button>
           <button className="menu-item">Change Password</button>
           <button className="menu-item">Delete Account</button>
-          <button className="menu-item logout">Logout</button>
+          <Logout onBeforeLogout={closeMenu} />
         </div>
       )}
     </div>
