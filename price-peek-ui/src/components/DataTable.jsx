@@ -180,7 +180,7 @@ const DataTable = ({ products, setProducts, handleSort, sortedField, sortDirecti
           <tbody>
             <tr>
               <td colSpan="7">
-                <h2>No Record Found, Please Add Products</h2>
+                <h2>No Records Found, Please Add Products</h2>
               </td>
             </tr>
           </tbody>
